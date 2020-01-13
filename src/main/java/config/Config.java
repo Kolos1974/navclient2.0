@@ -10,7 +10,7 @@ public class Config {
     public static String baseUrl;
     public static String signKey;
     public static String requestVersion = "1.1";
-    public static String headerVersion = "1.0";
+    public static String headerVersion = "2.0";
     public static String userName;
     private static String passwordHash;
     public static String password;
