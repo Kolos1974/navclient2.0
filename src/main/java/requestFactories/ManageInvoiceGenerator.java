@@ -4,8 +4,8 @@ import config.Config;
 import data.entity.Szamla;
 import exception.InvoiceRequestGenException;
 import exception.SHA512Exception;
-import hu.gov.nav.schemas.osa._1_0.api.*;
-import hu.gov.nav.schemas.osa._1_0.data.Invoice;
+import hu.gov.nav.schemas.osa._2_0.api.*;
+import hu.gov.nav.schemas.osa._2_0.data.InvoiceData;
 import utils.Algos;
 import utils.DateConverter;
 
@@ -30,28 +30,28 @@ public class ManageInvoiceGenerator {
     private InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
 
     public ManageInvoiceRequest generateObjFromEntity(Szamla szamla, String exchangeToken) throws InvoiceRequestGenException {
-        Invoice invoice = invoiceGenerator.generateObject(szamla);
+        InvoiceData invoice = invoiceGenerator.generateObject(szamla);
         if (szamla.isStorno())
-            return createManageInvoiceRequest(invoice, exchangeToken, OperationType.STORNO);
+            return createManageInvoiceRequest(invoice, exchangeToken, ManageInvoiceOperationType.STORNO);
         else return createManageInvoiceRequest(invoice, exchangeToken, null);
     }
 
-    public ManageInvoiceRequest generateObjFromFile(Path path, String exchangeToken, OperationType type) throws InvoiceRequestGenException {
+    public ManageInvoiceRequest generateObjFromFile(Path path, String exchangeToken, ManageInvoiceOperationType type) throws InvoiceRequestGenException {
         File file = new File(path.toUri());
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(Invoice.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(InvoiceData.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            Invoice invoice = (Invoice) unmarshaller.unmarshal(file);
+            InvoiceData invoice = (InvoiceData) unmarshaller.unmarshal(file);
             return createManageInvoiceRequest(invoice, exchangeToken, type);
         } catch (JAXBException e) {
             throw new InvoiceRequestGenException("A file-t nem lehet beparszolni: " + path.toAbsolutePath() + " " + e.getMessage());
         }
     }
 
-    private ManageInvoiceRequest createManageInvoiceRequest(Invoice invoice, String exchangeToken, OperationType type) throws InvoiceRequestGenException {
-        if (type == null) type = OperationType.CREATE;
+    private ManageInvoiceRequest createManageInvoiceRequest(InvoiceData invoice, String exchangeToken, ManageInvoiceOperationType type) throws InvoiceRequestGenException {
+        if (type == null) type = ManageInvoiceOperationType.CREATE;
         InvoiceOperationListType invoiceOperationList = new InvoiceOperationListType();
-        invoiceOperationList.setTechnicalAnnulment(type == OperationType.ANNUL);
+//        invoiceOperationList.setTechnicalAnnulment(type == ManageInvoiceOperationType.ANNUL); // TODO
         invoiceOperationList.setCompressedContent(false);
         try {
             InvoiceOperationType invoiceOperation = new InvoiceOperationType();
@@ -59,8 +59,8 @@ public class ManageInvoiceGenerator {
             String invoiceAsXmlString = invoiceToXmlString(invoice);
             String base64EncodedInvoice = Algos.encodeBase64(invoiceAsXmlString);
             String crs = Algos.getCRC3CheckSum(base64EncodedInvoice);
-            invoiceOperation.setInvoice(invoiceAsXmlString.getBytes(StandardCharsets.UTF_8));
-            invoiceOperation.setOperation(type);
+            invoiceOperation.setInvoiceData(invoiceAsXmlString.getBytes(StandardCharsets.UTF_8));
+            invoiceOperation.setInvoiceOperation(type);
             invoiceOperationList.getInvoiceOperation().add(invoiceOperation);
             ManageInvoiceRequest manageInvoiceRequest = new ManageInvoiceRequest();
             manageInvoiceRequest.setInvoiceOperations(invoiceOperationList);
@@ -84,12 +84,12 @@ public class ManageInvoiceGenerator {
             return manageInvoiceRequest;
 
         } catch ( JAXBException | SHA512Exception | DatatypeConfigurationException e) {
-            throw new InvoiceRequestGenException("Hiba az Invoice generalas soran: " + e.getMessage());
+            throw new InvoiceRequestGenException("Hiba az InvoiceData generalas soran: " + e.getMessage());
         }
     }
 
-    private String invoiceToXmlString(Invoice invoice) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Invoice.class);
+    private String invoiceToXmlString(InvoiceData invoice) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(InvoiceData.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         StringWriter stringWriter = new StringWriter();
         marshaller.marshal(invoice, stringWriter);

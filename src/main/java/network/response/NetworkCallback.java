@@ -1,7 +1,7 @@
 package network.response;
 
-import hu.gov.nav.schemas.osa._1_0.api.GeneralErrorResponse;
-import hu.gov.nav.schemas.osa._1_0.api.TokenExchangeResponse;
+import hu.gov.nav.schemas.osa._2_0.api.GeneralErrorResponse;
+import hu.gov.nav.schemas.osa._2_0.api.TokenExchangeResponse;
 
 public interface NetworkCallback<T> {
 

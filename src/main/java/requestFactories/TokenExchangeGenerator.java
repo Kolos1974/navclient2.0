@@ -3,9 +3,9 @@ package requestFactories;
 import config.Config;
 import exception.SHA512Exception;
 import exception.TokenExchangeRequestGenException;
-import hu.gov.nav.schemas.osa._1_0.api.BasicHeaderType;
-import hu.gov.nav.schemas.osa._1_0.api.TokenExchangeRequest;
-import hu.gov.nav.schemas.osa._1_0.api.UserHeaderType;
+import hu.gov.nav.schemas.osa._2_0.api.BasicHeaderType;
+import hu.gov.nav.schemas.osa._2_0.api.TokenExchangeRequest;
+import hu.gov.nav.schemas.osa._2_0.api.UserHeaderType;
 import utils.DateConverter;
 import utils.Algos;
 

@@ -2,7 +2,7 @@ package ui.controller.invoiceStatus;
 
 import exception.QueryInvoiceStatusGenException;
 import exception.XmlPrettifyException;
-import hu.gov.nav.schemas.osa._1_0.api.*;
+import hu.gov.nav.schemas.osa._2_0.api.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +18,7 @@ import ui.Coordinator;
 import ui.controller.BaseController;
 import utils.XmlFormatter;
 
-public class InvoiceStatusCheckController extends BaseController implements NetworkCallback<QueryInvoiceStatusResponse> {
+public class InvoiceStatusCheckController extends BaseController implements NetworkCallback<QueryTransactionStatusResponse> {
 
     private static final String TAG = "InvoiceStatusCheckController";
 
@@ -50,8 +50,8 @@ public class InvoiceStatusCheckController extends BaseController implements Netw
         if (transactionId.equals("")) return;
         clearFields();
         try {
-            QueryInvoiceStatusRequest queryInvoiceStatusRequest = QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
-            NetworkManager.INSTANCE.queryInvoiceStatus(queryInvoiceStatusRequest, this);
+            QueryTransactionStatusRequest QueryTransactionStatusRequest = QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
+            NetworkManager.INSTANCE.queryInvoiceStatus(QueryTransactionStatusRequest, this);
         } catch (QueryInvoiceStatusGenException e) {
             e.printStackTrace();
         }
@@ -63,7 +63,7 @@ public class InvoiceStatusCheckController extends BaseController implements Netw
     }
 
     @Override
-    public void onSuccess(QueryInvoiceStatusResponse response) {
+    public void onSuccess(QueryTransactionStatusResponse response) {
         if (response.getProcessingResults() == null) {
             Platform.runLater(() -> showAlert("Nincsen ehhez a Transaction ID-hoz Invoice!", Alert.AlertType.WARNING));
         } else {

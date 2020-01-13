@@ -3,7 +3,7 @@ package requestFactories;
 import config.Config;
 import exception.QueryInvoiceStatusGenException;
 import exception.SHA512Exception;
-import hu.gov.nav.schemas.osa._1_0.api.*;
+import hu.gov.nav.schemas.osa._2_0.api.*;
 import utils.Algos;
 import utils.DateConverter;
 
