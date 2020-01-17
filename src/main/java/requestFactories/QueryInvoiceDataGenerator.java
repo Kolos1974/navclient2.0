@@ -26,17 +26,17 @@ public class QueryInvoiceDataGenerator {
             BasicHeaderType basicHeaderType = Common.getBasicHeaderType(requestId, xmlGregorianCalendar);
             UserHeaderType userHeaderType = Common.getUserHeaderTypeNormal(now, requestId);
 
-            InvoiceQueryType invoiceQueryType = new InvoiceQueryType();
-            invoiceQueryType.setInvoiceNumber(invoiceNumber);
-//            //params...
-//            InvoiceQueryParamsType invoiceQueryParamsType = new InvoiceQueryParamsType();
-//            invoiceQueryParamsType.set
-            QueryInvoiceDataRequest queryInvoiceDataRequest = new QueryInvoiceDataRequest();
-            queryInvoiceDataRequest.setHeader(basicHeaderType);
-            queryInvoiceDataRequest.setUser(userHeaderType);
-            queryInvoiceDataRequest.setInvoiceQuery(invoiceQueryType);
-            queryInvoiceDataRequest.setPage(1);
-            return queryInvoiceDataRequest;
+//            InvoiceQueryType invoiceQueryType = new InvoiceQueryType();
+//            invoiceQueryType.setInvoiceNumber(invoiceNumber);
+////            //params...
+////            InvoiceQueryParamsType invoiceQueryParamsType = new InvoiceQueryParamsType();
+////            invoiceQueryParamsType.set
+//            QueryInvoiceDataRequest queryInvoiceDataRequest = new QueryInvoiceDataRequest();
+//            queryInvoiceDataRequest.setHeader(basicHeaderType);
+//            queryInvoiceDataRequest.setUser(userHeaderType);
+//            queryInvoiceDataRequest.setInvoiceQuery(invoiceQueryType);
+//            queryInvoiceDataRequest.setPage(1);
+            return null;
         } catch (SHA512Exception | DatatypeConfigurationException e) {
             throw new QueryInvoiceStatusGenException(e.getMessage());
         }
