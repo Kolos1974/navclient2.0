@@ -11,7 +11,7 @@
 <VBox fx:id="mainVBox" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8"
       xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Text text="Üdv a Nav számlabeküldő alkalmazasban! v1.1">
+        <Text text="Üdv a Nav számlabeküldő alkalmazasban! v2.0">
             <font>
                 <Font size="25.0"/>
             </font>
