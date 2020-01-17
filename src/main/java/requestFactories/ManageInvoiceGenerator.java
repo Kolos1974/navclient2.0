@@ -27,10 +27,10 @@ public class ManageInvoiceGenerator {
 
     private ManageInvoiceGenerator() {}
 
-    private InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
+    private InvoiceDataGenerator invoiceDataGenerator = new InvoiceDataGenerator();
 
     public ManageInvoiceRequest generateObjFromEntity(Szamla szamla, String exchangeToken) throws InvoiceRequestGenException {
-        InvoiceData invoice = invoiceGenerator.generateObject(szamla);
+        InvoiceData invoice = invoiceDataGenerator.generateObject(szamla);
         if (szamla.isStorno())
             return createManageInvoiceRequest(invoice, exchangeToken, ManageInvoiceOperationType.STORNO);
         else return createManageInvoiceRequest(invoice, exchangeToken, null);

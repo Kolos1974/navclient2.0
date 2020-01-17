@@ -16,7 +16,7 @@ import java.util.Map;
 
 // Example: https://github.com/nav-gov-hu/Online-Invoice/blob/master/sample/Data%20sample/01_Belf%C3%B6ldi%20term%C3%A9k%C3%A9rt%C3%A9kes%C3%ADt%C3%A9s.xml
 
-public class InvoiceGenerator {
+public class InvoiceDataGenerator {
 
     public InvoiceData generateObject(Szamla szamla) throws InvoiceRequestGenException {
         InvoiceData invoice = new InvoiceData();
