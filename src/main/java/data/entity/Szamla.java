@@ -17,7 +17,8 @@ public class Szamla {
         PROCESSING,
         DONE,
         ABORTED,
-        RECEIVED
+        RECEIVED,
+        SAVED
     }
 
     private SzamlaType type;
