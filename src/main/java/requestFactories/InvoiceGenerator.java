@@ -14,9 +14,12 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
+// Example: https://github.com/nav-gov-hu/Online-Invoice/blob/master/sample/Data%20sample/01_Belf%C3%B6ldi%20term%C3%A9k%C3%A9rt%C3%A9kes%C3%ADt%C3%A9s.xml
+
 public class InvoiceGenerator {
 
     public InvoiceData generateObject(Szamla szamla) throws InvoiceRequestGenException {
+        InvoiceData invoice = new InvoiceData();
         //<supplierInfo>
         SupplierInfoType supplierInfo = new SupplierInfoType();
         //<supplierTaxNumber>
@@ -67,12 +70,11 @@ public class InvoiceGenerator {
         //</customerInfo>
         // TODO: fiscalRepresentativeInfo kell?
         InvoiceDetailType invoiceDetail = new InvoiceDetailType();
-        invoiceDetail.setInvoiceNumber(szamla.getIktSzam()); // ??
         invoiceDetail.setInvoiceCategory(InvoiceCategoryType.NORMAL);
         try {
             XMLGregorianCalendar invoiceIssueDate = DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getSzdat());
             invoiceIssueDate.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
-            invoiceDetail.setInvoiceIssueDate(invoiceIssueDate); // ??
+            invoice.setInvoiceIssueDate(invoiceIssueDate);
             XMLGregorianCalendar paymentDate = DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getEsdat());
             paymentDate.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
             invoiceDetail.setPaymentDate(paymentDate);
@@ -125,12 +127,21 @@ public class InvoiceGenerator {
 
             line.setUnitPrice(tetel.getEgysegAr());
             LineAmountsNormalType lineAmountsNormal = new LineAmountsNormalType();
-            lineAmountsNormal.setLineNetAmount(tetel.getAfaalap()); // ??
+            LineNetAmountDataType lineNetAmountData = new LineNetAmountDataType();
+            lineNetAmountData.setLineNetAmount(tetel.getAfaalap());
+            lineNetAmountData.setLineNetAmountHUF(tetel.getAfaalap());
+            lineAmountsNormal.setLineNetAmountData(lineNetAmountData);
             VatRateType vatRate = new VatRateType();
             vatRate.setVatPercentage(tetel.getAfaSzazalek().divide(bigDecimal100).stripTrailingZeros());
             lineAmountsNormal.setLineVatRate(vatRate);
-            lineAmountsNormal.setLineVatAmount(tetel.getAfaertek()); // ??
-            lineAmountsNormal.setLineGrossAmountNormal(tetel.getBrutto()); // ??
+            LineVatDataType lineVatData = new LineVatDataType();
+            lineVatData.setLineVatAmount(tetel.getAfaertek());
+            lineVatData.setLineVatAmountHUF(tetel.getAfaertek());
+            lineAmountsNormal.setLineVatData(lineVatData);
+            LineGrossAmountDataType lineGrossAmountData = new LineGrossAmountDataType();
+            lineGrossAmountData.setLineGrossAmountNormal(tetel.getBrutto());
+            lineGrossAmountData.setLineGrossAmountNormalHUF(tetel.getBrutto());
+            lineAmountsNormal.setLineGrossAmountData(lineGrossAmountData);
             line.setLineAmountsNormal(lineAmountsNormal);
             if (szamla.isStorno()) {
                 LineModificationReferenceType lineModificationReferenceType = new LineModificationReferenceType();
@@ -153,43 +164,60 @@ public class InvoiceGenerator {
             VatRateType vatRateSum = new VatRateType();
             vatRateSum.setVatPercentage(value.getAfaSzazalek().divide(bigDecimal100).stripTrailingZeros());
             summaryByVatRate.setVatRate(vatRateSum);
-            summaryByVatRate.setVatRateNetAmount(value.getAfaalapSum()); // ??
-            summaryByVatRate.setVatRateVatAmount(value.getAfaertekSum()); // ??
-            summaryByVatRate.setVatRateVatAmountHUF(value.getAfaertekSum()); // ??
-            summaryByVatRate.setVatRateGrossAmount(value.getBruttoSum()); // ??
+            VatRateNetDataType vatRateNetData = new VatRateNetDataType();
+            vatRateNetData.setVatRateNetAmount(value.getAfaalapSum());
+            vatRateNetData.setVatRateNetAmountHUF(value.getAfaalapSum());
+            summaryByVatRate.setVatRateNetData(vatRateNetData);
+            VatRateVatDataType vatRateVatData = new VatRateVatDataType();
+            vatRateVatData.setVatRateVatAmount(value.getAfaertekSum());
+            vatRateVatData.setVatRateVatAmountHUF(value.getAfaertekSum());
+            summaryByVatRate.setVatRateVatData(vatRateVatData);
+            VatRateGrossDataType vatRateGrossData = new VatRateGrossDataType();
+            vatRateGrossData.setVatRateGrossAmount(value.getBruttoSum());
+            vatRateGrossData.setVatRateGrossAmountHUF(value.getBruttoSum());
+            summaryByVatRate.setVatRateGrossData(vatRateGrossData);
             summaryNormal.getSummaryByVatRate().add(summaryByVatRate);
         }
         //</summaryByVatRate>
         OverallSummary overallSummary = szamla.getOverallSummary();
         summaryNormal.setInvoiceNetAmount(overallSummary.getAfaalapOverallSum());
+        summaryNormal.setInvoiceNetAmountHUF(overallSummary.getAfaalapOverallSum());
         summaryNormal.setInvoiceVatAmount(overallSummary.getAfaertekOverallSum());
         summaryNormal.setInvoiceVatAmountHUF(overallSummary.getAfaertekOverallSum());
         //</summaryNormal>
         invoiceSummary.setSummaryNormal(summaryNormal);
-        invoiceSummary.setInvoiceGrossAmount(overallSummary.getBruttoOverallSum()); // ??
+        // <summaryGrossData>
+        SummaryGrossDataType summaryGrossData = new SummaryGrossDataType();
+        summaryGrossData.setInvoiceGrossAmount(overallSummary.getBruttoOverallSum());
+        summaryGrossData.setInvoiceGrossAmountHUF(overallSummary.getBruttoOverallSum());
+        invoiceSummary.setSummaryGrossData(summaryGrossData);
         //</invoiceSummary>
 
-        InvoiceExchangeType invoiceExchange = new InvoiceExchangeType(); // ??
-        invoiceExchange.setInvoiceHead(invoiceHead); // ??
-        invoiceExchange.setInvoiceLines(lines); // ??
-        invoiceExchange.setInvoiceSummary(invoiceSummary); // ??
+        // <invoice>
+        InvoiceType invoiceType = new InvoiceType();
+        invoiceType.setInvoiceHead(invoiceHead);
+        invoiceType.setInvoiceLines(lines);
+        invoiceType.setInvoiceSummary(invoiceSummary);
+
+        // invoiceMain
+        InvoiceMainType invoiceMain = new InvoiceMainType();
+        invoiceMain.setInvoice(invoiceType);
 
         //ST_EREDETI SZEREPEL
         if (szamla.isStorno()) {
             InvoiceReferenceType invoiceReferenceType = new InvoiceReferenceType();
             invoiceReferenceType.setOriginalInvoiceNumber(szamla.getStEredeti());
             invoiceReferenceType.setModifyWithoutMaster(false);
-            try {
-                invoiceReferenceType.setModificationTimestamp(DateConverter.convertTimestampToXmlGregorianCalendarWithUTC(szamla.getBekdat())); // ??
-                invoiceReferenceType.setModificationIssueDate(DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getSzdat())); // ??
-            } catch (DatatypeConfigurationException e) {
-                throw new InvoiceRequestGenException(e.getMessage());
-            }
-            invoiceExchange.setInvoiceReference(invoiceReferenceType); // ??
+//            try {
+//                invoiceReferenceType.setModificationTimestamp(DateConverter.convertTimestampToXmlGregorianCalendarWithUTC(szamla.getBekdat())); // ??
+//                invoiceReferenceType.setModificationIssueDate(DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getSzdat())); // ??
+//            } catch (DatatypeConfigurationException e) {
+//                throw new InvoiceRequestGenException(e.getMessage());
+//            }
+            invoiceType.setInvoiceReference(invoiceReferenceType); // ??
         }
-
-        InvoiceData invoice = new InvoiceData();
-        invoice.setInvoiceExchange(invoiceExchange); // ??
+        invoice.setInvoiceNumber(szamla.getIktSzam());
+        invoice.setInvoiceMain(invoiceMain);
         return invoice;
     }
 
