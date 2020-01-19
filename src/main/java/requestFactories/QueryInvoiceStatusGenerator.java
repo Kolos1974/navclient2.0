@@ -4,6 +4,7 @@ import exception.QueryInvoiceStatusGenException;
 import exception.SHA512Exception;
 import hu.gov.nav.schemas.osa._2_0.api.BasicHeaderType;
 import hu.gov.nav.schemas.osa._2_0.api.QueryTransactionStatusRequest;
+import hu.gov.nav.schemas.osa._2_0.api.SoftwareType;
 import hu.gov.nav.schemas.osa._2_0.api.UserHeaderType;
 import utils.DateConverter;
 
@@ -24,12 +25,14 @@ public class QueryInvoiceStatusGenerator {
             XMLGregorianCalendar xmlGregorianCalendar = DateConverter.convertInstantToXmlGregorianCalendar(now);
             BasicHeaderType basicHeaderType = Common.getBasicHeaderType(requestId, xmlGregorianCalendar);
             UserHeaderType userHeaderType = Common.getUserHeaderTypeNormal(now ,requestId);
-            QueryTransactionStatusRequest QueryTransactionStatusRequest = new QueryTransactionStatusRequest();
-            QueryTransactionStatusRequest.setReturnOriginalRequest(true);
-            QueryTransactionStatusRequest.setTransactionId(transactionId);
-            QueryTransactionStatusRequest.setHeader(basicHeaderType);
-            QueryTransactionStatusRequest.setUser(userHeaderType);
-            return QueryTransactionStatusRequest;
+            SoftwareType softwareType = Common.getSoftwareType();
+            QueryTransactionStatusRequest queryTransactionStatusRequest = new QueryTransactionStatusRequest();
+            queryTransactionStatusRequest.setReturnOriginalRequest(true);
+            queryTransactionStatusRequest.setTransactionId(transactionId);
+            queryTransactionStatusRequest.setHeader(basicHeaderType);
+            queryTransactionStatusRequest.setUser(userHeaderType);
+            queryTransactionStatusRequest.setSoftware(softwareType);
+            return queryTransactionStatusRequest;
         } catch (SHA512Exception e) {
             throw new QueryInvoiceStatusGenException("SHA couldnt be generated!");
         } catch (DatatypeConfigurationException e) {
