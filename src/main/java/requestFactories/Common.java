@@ -3,6 +3,7 @@ package requestFactories;
 import config.Config;
 import exception.SHA512Exception;
 import hu.gov.nav.schemas.osa._2_0.api.BasicHeaderType;
+import hu.gov.nav.schemas.osa._2_0.api.SoftwareType;
 import hu.gov.nav.schemas.osa._2_0.api.UserHeaderType;
 import utils.Algos;
 
@@ -39,6 +40,19 @@ public class Common {
         userHeaderType.setTaxNumber(Config.taxNumber);
         userHeaderType.setRequestSignature(Algos.generateSha512From(requestId + Common.getFormattedDate(now) + Config.signKey));
         return userHeaderType;
+    }
+
+    public static SoftwareType getSoftwareType() {
+        SoftwareType softwareType = new SoftwareType();
+        softwareType.setSoftwareId(Config.softwareId);
+        softwareType.setSoftwareName(Config.softwareName);
+        softwareType.setSoftwareOperation(Config.softwareOperation);
+        softwareType.setSoftwareMainVersion(Config.softwareMainVersion);
+        softwareType.setSoftwareDevName(Config.softwareDevName);
+        softwareType.setSoftwareDevContact(Config.softwareDevContact);
+        softwareType.setSoftwareDevCountryCode(Config.softwareDevCountryCode);
+        softwareType.setSoftwareDevTaxNumber(Config.softwareDevTaxNumber);
+        return softwareType;
     }
 
 }
