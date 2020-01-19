@@ -35,6 +35,13 @@ public class SajatDataDao extends BaseDao {
                 Config.navExport = resultSet.getString("NAV_EXPORT");
                 Config.navMinTax = resultSet.getInt("NAV_MINTAX");
                 Config.navInvoiceDate = resultSet.getTimestamp("NAV_INVOICEDATE");
+                Config.softwareId = resultSet.getString("NAV_SW_ID");
+                Config.softwareName = resultSet.getString("NAV_SW_NAME");
+                Config.softwareMainVersion = resultSet.getString("NAV_SW_MAINVERSION");
+                Config.softwareDevName = resultSet.getString("NAV_SW_DEVNAME");
+                Config.softwareDevContact = resultSet.getString("NAV_SW_DEVCONTACT");
+                Config.softwareDevCountryCode = resultSet.getString("NAV_SW_DEVCOUNTRYCODE");
+                Config.softwareDevTaxNumber = resultSet.getString("NAV_SW_DEVTAXNUMBER");
             }
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
