@@ -92,6 +92,7 @@ public class NetworkManager {
         });
     }
 
+    // TODO: refactor these error code duplication
     public void queryInvoiceStatus(QueryTransactionStatusRequest request, NetworkCallback<QueryTransactionStatusResponse> callback) {
         Call<QueryTransactionStatusResponse> call = navService.queryInvoiceStatus(request);
         call.enqueue(new Callback<QueryTransactionStatusResponse>() {
@@ -107,7 +108,7 @@ public class NetworkManager {
                         callback.onError(getGeneralError(response.errorBody().byteStream()));
                     } catch (JAXBException e) {
                         e.printStackTrace();
-                        callback.onFail("QueryInvoiceStatus: Error message couldnt be parsed");
+                        callback.onFail("QueryInvoiceStatus: Error message couldn't be parsed. Error message: " + response.message());
                     }
                 }
             }

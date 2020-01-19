@@ -50,8 +50,8 @@ public class InvoiceStatusCheckController extends BaseController implements Netw
         if (transactionId.equals("")) return;
         clearFields();
         try {
-            QueryTransactionStatusRequest QueryTransactionStatusRequest = QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
-            NetworkManager.INSTANCE.queryInvoiceStatus(QueryTransactionStatusRequest, this);
+            QueryTransactionStatusRequest queryTransactionStatusRequest = QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
+            NetworkManager.INSTANCE.queryInvoiceStatus(queryTransactionStatusRequest, this);
         } catch (QueryInvoiceStatusGenException e) {
             e.printStackTrace();
         }
