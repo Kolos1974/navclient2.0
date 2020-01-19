@@ -2,8 +2,8 @@ package requestFactories;
 
 import config.Config;
 import exception.SHA512Exception;
-import hu.gov.nav.schemas.osa._1_0.api.BasicHeaderType;
-import hu.gov.nav.schemas.osa._1_0.api.UserHeaderType;
+import hu.gov.nav.schemas.osa._2_0.api.BasicHeaderType;
+import hu.gov.nav.schemas.osa._2_0.api.UserHeaderType;
 import utils.Algos;
 
 import javax.xml.datatype.XMLGregorianCalendar;

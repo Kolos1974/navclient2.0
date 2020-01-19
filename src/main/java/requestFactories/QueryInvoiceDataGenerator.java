@@ -3,7 +3,7 @@ package requestFactories;
 import config.Config;
 import exception.QueryInvoiceStatusGenException;
 import exception.SHA512Exception;
-import hu.gov.nav.schemas.osa._1_0.api.*;
+import hu.gov.nav.schemas.osa._2_0.api.*;
 import utils.Algos;
 import utils.DateConverter;
 
@@ -26,17 +26,17 @@ public class QueryInvoiceDataGenerator {
             BasicHeaderType basicHeaderType = Common.getBasicHeaderType(requestId, xmlGregorianCalendar);
             UserHeaderType userHeaderType = Common.getUserHeaderTypeNormal(now, requestId);
 
-            InvoiceQueryType invoiceQueryType = new InvoiceQueryType();
-            invoiceQueryType.setInvoiceNumber(invoiceNumber);
-//            //params...
-//            InvoiceQueryParamsType invoiceQueryParamsType = new InvoiceQueryParamsType();
-//            invoiceQueryParamsType.set
-            QueryInvoiceDataRequest queryInvoiceDataRequest = new QueryInvoiceDataRequest();
-            queryInvoiceDataRequest.setHeader(basicHeaderType);
-            queryInvoiceDataRequest.setUser(userHeaderType);
-            queryInvoiceDataRequest.setInvoiceQuery(invoiceQueryType);
-            queryInvoiceDataRequest.setPage(1);
-            return queryInvoiceDataRequest;
+//            InvoiceQueryType invoiceQueryType = new InvoiceQueryType();
+//            invoiceQueryType.setInvoiceNumber(invoiceNumber);
+////            //params...
+////            InvoiceQueryParamsType invoiceQueryParamsType = new InvoiceQueryParamsType();
+////            invoiceQueryParamsType.set
+//            QueryInvoiceDataRequest queryInvoiceDataRequest = new QueryInvoiceDataRequest();
+//            queryInvoiceDataRequest.setHeader(basicHeaderType);
+//            queryInvoiceDataRequest.setUser(userHeaderType);
+//            queryInvoiceDataRequest.setInvoiceQuery(invoiceQueryType);
+//            queryInvoiceDataRequest.setPage(1);
+            return null;
         } catch (SHA512Exception | DatatypeConfigurationException e) {
             throw new QueryInvoiceStatusGenException(e.getMessage());
         }

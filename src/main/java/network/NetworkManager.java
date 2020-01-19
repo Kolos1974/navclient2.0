@@ -1,7 +1,7 @@
 package network;
 
 import config.Config;
-import hu.gov.nav.schemas.osa._1_0.api.*;
+import hu.gov.nav.schemas.osa._2_0.api.*;
 import network.response.NetworkCallback;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,11 +92,11 @@ public class NetworkManager {
         });
     }
 
-    public void queryInvoiceStatus(QueryInvoiceStatusRequest request, NetworkCallback<QueryInvoiceStatusResponse> callback) {
-        Call<QueryInvoiceStatusResponse> call = navService.queryInvoiceStatus(request);
-        call.enqueue(new Callback<QueryInvoiceStatusResponse>() {
+    public void queryInvoiceStatus(QueryTransactionStatusRequest request, NetworkCallback<QueryTransactionStatusResponse> callback) {
+        Call<QueryTransactionStatusResponse> call = navService.queryInvoiceStatus(request);
+        call.enqueue(new Callback<QueryTransactionStatusResponse>() {
             @Override
-            public void onResponse(Call<QueryInvoiceStatusResponse> call, Response<QueryInvoiceStatusResponse> response) {
+            public void onResponse(Call<QueryTransactionStatusResponse> call, Response<QueryTransactionStatusResponse> response) {
                 if (response.isSuccessful()) {
                     utils.Logger.logMessage(TAG, "QueryInvoiceStatus: Success");
                     callback.onSuccess(response.body());
@@ -113,7 +113,7 @@ public class NetworkManager {
             }
 
             @Override
-            public void onFailure(Call<QueryInvoiceStatusResponse> call, Throwable throwable) {
+            public void onFailure(Call<QueryTransactionStatusResponse> call, Throwable throwable) {
                 utils.Logger.logMessage(TAG, "QueryInvoiceStatus: Fail");
                 callback.onFail(throwable.getMessage());
             }

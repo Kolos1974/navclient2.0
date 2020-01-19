@@ -1,6 +1,6 @@
 package network;
 
-import hu.gov.nav.schemas.osa._1_0.api.*;
+import hu.gov.nav.schemas.osa._2_0.api.*;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -27,7 +27,7 @@ public interface NavService {
             "Content-Type: application/xml"
     })
     @POST("queryInvoiceStatus")
-    Call<QueryInvoiceStatusResponse> queryInvoiceStatus(@Body QueryInvoiceStatusRequest request);
+    Call<QueryTransactionStatusResponse> queryInvoiceStatus(@Body QueryTransactionStatusRequest request);
 
     @Headers({
             "Accept: application/xml",

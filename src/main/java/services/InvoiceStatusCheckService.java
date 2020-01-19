@@ -3,16 +3,15 @@ package services;
 import config.Config;
 import data.dao.DaoFactory;
 import data.dao.navStatus.NavStatusDao;
-import data.dao.szamla.BSzamlaDao;
 import data.dao.szamla.SzamlaDao;
 import data.entity.NavStatus;
 import data.entity.Szamla;
 import exception.DatabaseException;
 import exception.QueryInvoiceStatusGenException;
 import exception.XmlPrettifyException;
-import hu.gov.nav.schemas.osa._1_0.api.GeneralErrorResponse;
-import hu.gov.nav.schemas.osa._1_0.api.QueryInvoiceStatusRequest;
-import hu.gov.nav.schemas.osa._1_0.api.QueryInvoiceStatusResponse;
+import hu.gov.nav.schemas.osa._2_0.api.GeneralErrorResponse;
+import hu.gov.nav.schemas.osa._2_0.api.QueryTransactionStatusRequest;
+import hu.gov.nav.schemas.osa._2_0.api.QueryTransactionStatusResponse;
 import network.NetworkManager;
 import network.response.NetworkCallback;
 import requestFactories.QueryInvoiceStatusGenerator;
@@ -24,7 +23,6 @@ import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -76,11 +74,11 @@ public class InvoiceStatusCheckService extends RepeatableService {
                 List<NavStatus> navStatuses = navStatusDao.getAllNotDoneOrAborted();
                 utils.Logger.logMessage(TAG, "Checking " + navStatuses.size() + " invoice statuses from DB");
                 for (NavStatus navStatus : navStatuses) {
-                    QueryInvoiceStatusRequest queryInvoiceStatusRequest =
+                    QueryTransactionStatusRequest QueryTransactionStatusRequest =
                             QueryInvoiceStatusGenerator.INSTANCE.generateObj(navStatus.getTransactionid());
-                    NetworkManager.INSTANCE.queryInvoiceStatus(queryInvoiceStatusRequest, new NetworkCallback<QueryInvoiceStatusResponse>() {
+                    NetworkManager.INSTANCE.queryInvoiceStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
                         @Override
-                        public void onSuccess(QueryInvoiceStatusResponse response) {
+                        public void onSuccess(QueryTransactionStatusResponse response) {
                             if (response.getProcessingResults() == null) return;
                             String status = response.getProcessingResults().getProcessingResult().get(0).getInvoiceStatus().value();
                             navStatus.setInvoicestatus(status);
@@ -120,11 +118,11 @@ public class InvoiceStatusCheckService extends RepeatableService {
             while (iterator.hasNext()) {
                 String transactionId = iterator.next();
                 try {
-                    QueryInvoiceStatusRequest queryInvoiceStatusRequest =
+                    QueryTransactionStatusRequest QueryTransactionStatusRequest =
                             QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
-                    NetworkManager.INSTANCE.queryInvoiceStatus(queryInvoiceStatusRequest, new NetworkCallback<QueryInvoiceStatusResponse>() {
+                    NetworkManager.INSTANCE.queryInvoiceStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
                         @Override
-                        public void onSuccess(QueryInvoiceStatusResponse response) {
+                        public void onSuccess(QueryTransactionStatusResponse response) {
                             String status = response.getProcessingResults().getProcessingResult().get(0).getInvoiceStatus().value();
                             if (status.equals(Szamla.States.DONE.name()) || status.equals(Szamla.States.ABORTED.name())) {
                                 Path path = transactionIds.get(transactionId);
@@ -162,12 +160,12 @@ public class InvoiceStatusCheckService extends RepeatableService {
 
     }
 
-    private void writeStatusResponseToFile(QueryInvoiceStatusResponse response, File file) {
+    private void writeStatusResponseToFile(QueryTransactionStatusResponse response, File file) {
         try {
             byte[] originalRequest = response.getProcessingResults().getProcessingResult().get(0).getOriginalRequest();
             String prettid = XmlFormatter.prettify(new String(originalRequest));
             response.getProcessingResults().getProcessingResult().get(0).setOriginalRequest(null);
-            JAXBContext context = JAXBContext.newInstance(QueryInvoiceStatusResponse.class);
+            JAXBContext context = JAXBContext.newInstance(QueryTransactionStatusResponse.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             utils.Logger.logMessage(TAG, "Saving file to "+ file.getAbsolutePath());

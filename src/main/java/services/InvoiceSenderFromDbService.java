@@ -10,7 +10,7 @@ import exception.AES128Exception;
 import exception.DatabaseException;
 import exception.InvoiceRequestGenException;
 import exception.TokenExchangeRequestGenException;
-import hu.gov.nav.schemas.osa._1_0.api.*;
+import hu.gov.nav.schemas.osa._2_0.api.*;
 import network.NetworkManager;
 import network.response.NetworkCallback;
 import requestFactories.ManageInvoiceGenerator;

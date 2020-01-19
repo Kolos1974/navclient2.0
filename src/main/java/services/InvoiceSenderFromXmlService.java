@@ -4,7 +4,7 @@ import config.Config;
 import exception.AES128Exception;
 import exception.InvoiceRequestGenException;
 import exception.TokenExchangeRequestGenException;
-import hu.gov.nav.schemas.osa._1_0.api.*;
+import hu.gov.nav.schemas.osa._2_0.api.*;
 import javafx.concurrent.Task;
 import network.NetworkManager;
 import network.response.NetworkCallback;
@@ -107,10 +107,10 @@ public class InvoiceSenderFromXmlService extends Task<Void> {
                 if (kind == OVERFLOW) {
                     continue;
                 } else if (kind == ENTRY_CREATE && fileName.endsWith(".xml")) {
-                    if (fileName.contains(OperationType.ANNUL.name())) sendInvoice(path, OperationType.ANNUL);
-                    else if (fileName.contains(OperationType.MODIFY.name())) sendInvoice(path, OperationType.MODIFY);
-                    else if (fileName.contains(OperationType.STORNO.name())) sendInvoice(path, OperationType.STORNO);
-                    else sendInvoice(path, OperationType.CREATE);
+//                    if (fileName.contains(ManageInvoiceOperationType.ANNUL.name())) sendInvoice(path, ManageInvoiceOperationType.ANNUL); //TODO ez mar nincs??
+                    if (fileName.contains(ManageInvoiceOperationType.MODIFY.name())) sendInvoice(path, ManageInvoiceOperationType.MODIFY);
+                    else if (fileName.contains(ManageInvoiceOperationType.STORNO.name())) sendInvoice(path, ManageInvoiceOperationType.STORNO);
+                    else sendInvoice(path, ManageInvoiceOperationType.CREATE);
                 }
 
 
@@ -133,7 +133,7 @@ public class InvoiceSenderFromXmlService extends Task<Void> {
         return null;
     }
 
-    private void sendInvoice(Path path, OperationType type) {
+    private void sendInvoice(Path path, ManageInvoiceOperationType type) {
         File oldFile = new File(path.toAbsolutePath().toUri());
         try {
             TokenExchangeRequest tokenExchangeRequest = TokenExchangeGenerator.INSTANCE.generateObject();
