@@ -128,6 +128,13 @@ public class MainController extends BaseController {
                     Config.intervalTime = scanner.nextInt();
                     Config.navImport = scanner.next();
                     Config.navExport = scanner.next();
+                    Config.softwareId = scanner.next();
+                    Config.softwareName = scanner.next();
+                    Config.softwareMainVersion = scanner.next();
+                    Config.softwareDevName = scanner.next();
+                    Config.softwareDevContact = scanner.next();
+                    Config.softwareDevCountryCode = scanner.next();
+                    Config.softwareDevTaxNumber = scanner.next();
                     break;
                 case MSSQL:
                     Config.dbUrl = scanner.next();
