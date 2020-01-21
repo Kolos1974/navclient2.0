@@ -76,7 +76,7 @@
         </HBox>
         <Button fx:id="manageInvoiceButton" alignment="CENTER" onAction="#handleManageInvoiceRequestButtonAction"
                 text="Manage Invoice Request" textAlignment="CENTER"/>
-        <Button fx:id="invoiceStatusButton" alignment="CENTER" onAction="#handleInvoiceStatusCheckButtonAction"
+        <Button fx:id="transactionStatusButton" alignment="CENTER" onAction="#handleInvoiceStatusCheckButtonAction"
                 text="Szamla statusz ellenorzese" textAlignment="CENTER"/>
         <Button fx:id="invoiceDataButton" alignment="CENTER" mnemonicParsing="false"
                 onAction="#handleInvoiceDataButtonAction" text="Invoice Data" textAlignment="CENTER"/>

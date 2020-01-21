@@ -26,15 +26,15 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
-public class InvoiceStatusCheckService extends RepeatableService {
+public class TransactionStatusCheckService extends RepeatableService {
 
     private static final String TAG = "InvoiceStatusCheckService";
 
-    private InvoiceStatusCheckService() {
+    private TransactionStatusCheckService() {
         szamlaDaoMap = DaoFactory.getSzamlaDaoMap();
     }
 
-    public static final InvoiceStatusCheckService INSTANCE  = new InvoiceStatusCheckService();
+    public static final TransactionStatusCheckService INSTANCE  = new TransactionStatusCheckService();
 
     private Map<String, Path> transactionIds = new LinkedHashMap<>();
 
@@ -76,7 +76,7 @@ public class InvoiceStatusCheckService extends RepeatableService {
                 for (NavStatus navStatus : navStatuses) {
                     QueryTransactionStatusRequest QueryTransactionStatusRequest =
                             QueryInvoiceStatusGenerator.INSTANCE.generateObj(navStatus.getTransactionid());
-                    NetworkManager.INSTANCE.queryInvoiceStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
+                    NetworkManager.INSTANCE.queryTransactionStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
                         @Override
                         public void onSuccess(QueryTransactionStatusResponse response) {
                             if (response.getProcessingResults() == null) return;
@@ -120,7 +120,7 @@ public class InvoiceStatusCheckService extends RepeatableService {
                 try {
                     QueryTransactionStatusRequest QueryTransactionStatusRequest =
                             QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
-                    NetworkManager.INSTANCE.queryInvoiceStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
+                    NetworkManager.INSTANCE.queryTransactionStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
                         @Override
                         public void onSuccess(QueryTransactionStatusResponse response) {
                             String status = response.getProcessingResults().getProcessingResult().get(0).getInvoiceStatus().value();

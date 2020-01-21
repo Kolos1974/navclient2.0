@@ -93,8 +93,8 @@ public class NetworkManager {
     }
 
     // TODO: refactor these error code duplication
-    public void queryInvoiceStatus(QueryTransactionStatusRequest request, NetworkCallback<QueryTransactionStatusResponse> callback) {
-        Call<QueryTransactionStatusResponse> call = navService.queryInvoiceStatus(request);
+    public void queryTransactionStatus(QueryTransactionStatusRequest request, NetworkCallback<QueryTransactionStatusResponse> callback) {
+        Call<QueryTransactionStatusResponse> call = navService.queryTransactionStatus(request);
         call.enqueue(new Callback<QueryTransactionStatusResponse>() {
             @Override
             public void onResponse(Call<QueryTransactionStatusResponse> call, Response<QueryTransactionStatusResponse> response) {

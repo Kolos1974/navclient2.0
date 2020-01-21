@@ -12,7 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import program.ThreadPool;
-import services.InvoiceStatusCheckService;
+import services.TransactionStatusCheckService;
 import ui.Coordinator;
 import ui.controller.BaseController;
 
@@ -48,7 +48,7 @@ public class MainController extends BaseController {
     @FXML
     private Button manageInvoiceButton;
     @FXML
-    private Button invoiceStatusButton;
+    private Button transactionStatusButton;
     @FXML
     private Button invoiceDataButton;
     @FXML
@@ -107,7 +107,7 @@ public class MainController extends BaseController {
                 navApiAddressLabel.setText(Config.baseUrl);
                 taxNumberLabel.setText(Config.taxNumber);
                 dissmisLoading();
-                InvoiceStatusCheckService.INSTANCE.start(null);
+                TransactionStatusCheckService.INSTANCE.start(null);
             }
 
         });
@@ -151,7 +151,7 @@ public class MainController extends BaseController {
 
     private void disableButtons() {
         manageInvoiceButton.setDisable(true);
-        invoiceStatusButton.setDisable(true);
+        transactionStatusButton.setDisable(true);
         invoiceDataButton.setDisable(true);
     }
 

@@ -1,4 +1,4 @@
-package ui.controller.invoiceStatus;
+package ui.controller.transactionStatus;
 
 import exception.QueryInvoiceStatusGenException;
 import exception.XmlPrettifyException;
@@ -18,7 +18,7 @@ import ui.Coordinator;
 import ui.controller.BaseController;
 import utils.XmlFormatter;
 
-public class InvoiceStatusCheckController extends BaseController implements NetworkCallback<QueryTransactionStatusResponse> {
+public class TransactionStatusCheckController extends BaseController implements NetworkCallback<QueryTransactionStatusResponse> {
 
     private static final String TAG = "InvoiceStatusCheckController";
 
@@ -35,7 +35,7 @@ public class InvoiceStatusCheckController extends BaseController implements Netw
     @FXML
     private HBox errorBox;
 
-    public InvoiceStatusCheckController(Coordinator coordinator) {
+    public TransactionStatusCheckController(Coordinator coordinator) {
         super(coordinator);
     }
 
@@ -51,7 +51,7 @@ public class InvoiceStatusCheckController extends BaseController implements Netw
         clearFields();
         try {
             QueryTransactionStatusRequest queryTransactionStatusRequest = QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
-            NetworkManager.INSTANCE.queryInvoiceStatus(queryTransactionStatusRequest, this);
+            NetworkManager.INSTANCE.queryTransactionStatus(queryTransactionStatusRequest, this);
         } catch (QueryInvoiceStatusGenException e) {
             e.printStackTrace();
         }

@@ -150,7 +150,7 @@ public class InvoiceSenderFromXmlService extends Task<Void> {
                                 File sentFile = new File(path.toAbsolutePath().toString().replace(".xml", ".sent"));
                                 if (!sentFile.exists()) {
                                     oldFile.renameTo(sentFile);
-                                    InvoiceStatusCheckService.INSTANCE.addTransactionId(response.getTransactionId(), path);
+                                    TransactionStatusCheckService.INSTANCE.addTransactionId(response.getTransactionId(), path);
                                 }
                             }
 
