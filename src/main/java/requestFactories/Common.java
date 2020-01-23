@@ -38,7 +38,7 @@ public class Common {
         userHeaderType.setLogin(Config.userName);
         userHeaderType.setPasswordHash(Config.getPasswordHash());
         userHeaderType.setTaxNumber(Config.taxNumber);
-        userHeaderType.setRequestSignature(Algos.generateSha512From(requestId + Common.getFormattedDate(now) + Config.signKey));
+        userHeaderType.setRequestSignature(Algos.generateSha3512From(requestId + Common.getFormattedDate(now) + Config.signKey).toUpperCase());
         return userHeaderType;
     }
 
