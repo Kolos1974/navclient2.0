@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import network.NetworkManager;
 import network.response.NetworkCallback;
-import requestFactories.QueryInvoiceStatusGenerator;
+import requestFactories.QueryTransactionStatusGenerator;
 import ui.Coordinator;
 import ui.controller.BaseController;
 import utils.XmlFormatter;
@@ -50,7 +50,7 @@ public class TransactionStatusCheckController extends BaseController implements 
         if (transactionId.equals("")) return;
         clearFields();
         try {
-            QueryTransactionStatusRequest queryTransactionStatusRequest = QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
+            QueryTransactionStatusRequest queryTransactionStatusRequest = QueryTransactionStatusGenerator.INSTANCE.generateObj(transactionId);
             NetworkManager.INSTANCE.queryTransactionStatus(queryTransactionStatusRequest, this);
         } catch (QueryInvoiceStatusGenException e) {
             e.printStackTrace();

@@ -14,7 +14,7 @@ import hu.gov.nav.schemas.osa._2_0.api.QueryTransactionStatusRequest;
 import hu.gov.nav.schemas.osa._2_0.api.QueryTransactionStatusResponse;
 import network.NetworkManager;
 import network.response.NetworkCallback;
-import requestFactories.QueryInvoiceStatusGenerator;
+import requestFactories.QueryTransactionStatusGenerator;
 import utils.XmlFormatter;
 
 import javax.xml.bind.JAXBContext;
@@ -75,7 +75,7 @@ public class TransactionStatusCheckService extends RepeatableService {
                 utils.Logger.logMessage(TAG, "Checking " + navStatuses.size() + " invoice statuses from DB");
                 for (NavStatus navStatus : navStatuses) {
                     QueryTransactionStatusRequest QueryTransactionStatusRequest =
-                            QueryInvoiceStatusGenerator.INSTANCE.generateObj(navStatus.getTransactionid());
+                            QueryTransactionStatusGenerator.INSTANCE.generateObj(navStatus.getTransactionid());
                     NetworkManager.INSTANCE.queryTransactionStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
                         @Override
                         public void onSuccess(QueryTransactionStatusResponse response) {
@@ -119,7 +119,7 @@ public class TransactionStatusCheckService extends RepeatableService {
                 String transactionId = iterator.next();
                 try {
                     QueryTransactionStatusRequest QueryTransactionStatusRequest =
-                            QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
+                            QueryTransactionStatusGenerator.INSTANCE.generateObj(transactionId);
                     NetworkManager.INSTANCE.queryTransactionStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
                         @Override
                         public void onSuccess(QueryTransactionStatusResponse response) {

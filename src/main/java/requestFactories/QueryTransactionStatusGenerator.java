@@ -12,11 +12,11 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Instant;
 
-public class QueryInvoiceStatusGenerator {
+public class QueryTransactionStatusGenerator {
 
-    private QueryInvoiceStatusGenerator() { }
+    private QueryTransactionStatusGenerator() { }
 
-    public static final QueryInvoiceStatusGenerator INSTANCE = new QueryInvoiceStatusGenerator();
+    public static final QueryTransactionStatusGenerator INSTANCE = new QueryTransactionStatusGenerator();
 
     public QueryTransactionStatusRequest generateObj(String transactionId) throws QueryInvoiceStatusGenException {
         Instant now = Instant.now();
