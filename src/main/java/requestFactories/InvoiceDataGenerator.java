@@ -68,7 +68,6 @@ public class InvoiceDataGenerator {
         customerAddress.setDetailedAddress(customerDetailedAddress);
         customerInfo.setCustomerAddress(customerAddress);
         //</customerInfo>
-        // TODO: fiscalRepresentativeInfo kell?
         InvoiceDetailType invoiceDetail = new InvoiceDetailType();
         invoiceDetail.setInvoiceCategory(InvoiceCategoryType.NORMAL);
         try {
