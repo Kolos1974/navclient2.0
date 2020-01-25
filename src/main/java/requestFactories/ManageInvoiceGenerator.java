@@ -51,14 +51,13 @@ public class ManageInvoiceGenerator {
     private ManageInvoiceRequest createManageInvoiceRequest(InvoiceData invoice, String exchangeToken, ManageInvoiceOperationType type) throws InvoiceRequestGenException {
         if (type == null) type = ManageInvoiceOperationType.CREATE;
         InvoiceOperationListType invoiceOperationList = new InvoiceOperationListType();
-//        invoiceOperationList.setTechnicalAnnulment(type == ManageInvoiceOperationType.ANNUL); // TODO
         invoiceOperationList.setCompressedContent(false);
         try {
             InvoiceOperationType invoiceOperation = new InvoiceOperationType();
             invoiceOperation.setIndex(1);
             String invoiceAsXmlString = invoiceToXmlString(invoice);
             String base64EncodedInvoice = Algos.encodeBase64(invoiceAsXmlString);
-            String crs = Algos.getCRC3CheckSum(base64EncodedInvoice);
+            String invoiceHash = Algos.generateSha3512From(type.value() + base64EncodedInvoice).toUpperCase();
             invoiceOperation.setInvoiceData(invoiceAsXmlString.getBytes(StandardCharsets.UTF_8));
             invoiceOperation.setInvoiceOperation(type);
             invoiceOperationList.getInvoiceOperation().add(invoiceOperation);
@@ -76,11 +75,13 @@ public class ManageInvoiceGenerator {
             userHeaderType.setLogin(Config.userName);
             userHeaderType.setPasswordHash(Config.getPasswordHash());
             userHeaderType.setTaxNumber(Config.taxNumber);
-            userHeaderType.setRequestSignature(Algos.generateSha512From(
-                    requestId + Common.getFormattedDate(now) + Config.signKey + crs));
+            userHeaderType.setRequestSignature(Algos.generateSha3512From(
+                    requestId + Common.getFormattedDate(now) + Config.signKey + invoiceHash).toUpperCase());
 
             manageInvoiceRequest.setHeader(basicHeaderType);
             manageInvoiceRequest.setUser(userHeaderType);
+            SoftwareType softwareType = Common.getSoftwareType();
+            manageInvoiceRequest.setSoftware(softwareType);
             return manageInvoiceRequest;
 
         } catch ( JAXBException | SHA512Exception | DatatypeConfigurationException e) {
