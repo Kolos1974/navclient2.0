@@ -158,7 +158,8 @@ public class InvoiceSenderFromXmlService extends Task<Void> {
                             public void onError(GeneralErrorResponse errorResponse) {
                                 changeCallback.onFailedAttemp();
                                 changeCallback.info(StateChangeCallback.MessageType.ERROR,
-                                        errorResponse.getResult().getFuncCode().value() + " " + errorResponse.getResult().getMessage());
+                                        errorResponse.getResult().getFuncCode().value() + " " + errorResponse.getResult().getMessage()
+                                                + ": " + errorResponse.getTechnicalValidationMessages().get(0).getMessage());
                             }
 
                             @Override
@@ -182,7 +183,8 @@ public class InvoiceSenderFromXmlService extends Task<Void> {
                 public void onError(GeneralErrorResponse errorResponse) {
                     changeCallback.onFailedAttemp();
                     changeCallback.info(StateChangeCallback.MessageType.ERROR,
-                            errorResponse.getResult().getFuncCode().value() + " " + errorResponse.getResult().getMessage());
+                            errorResponse.getResult().getFuncCode().value() + " " + errorResponse.getResult().getMessage()
+                                    + ": " + errorResponse.getTechnicalValidationMessages().get(0).getMessage());
                 }
 
                 @Override
