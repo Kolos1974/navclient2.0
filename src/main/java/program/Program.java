@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import ui.Coordinator;
 import ui.controller.*;
 import ui.controller.invoiceData.InvoiceDataController;
-import ui.controller.invoiceStatus.InvoiceStatusCheckController;
+import ui.controller.transactionStatus.TransactionStatusCheckController;
 import ui.controller.main.MainController;
 import ui.controller.manageInvoice.ManageInvoiceController;
 
@@ -26,7 +26,7 @@ public class Program extends Application implements Coordinator {
     private Stage window;
     private Scene mainScene;
     private Scene manageInvoiceScene;
-    private Scene invoiceStatusCheckScene;
+    private Scene transactionStatusCheckScene;
     private Scene invoiceDataScene;
 
     private Map<Scene, BaseController> controllerMap = new HashMap<>();
@@ -92,15 +92,15 @@ public class Program extends Application implements Coordinator {
 
     @Override
     public void goToInvoiceStatusCheck() {
-        if (invoiceStatusCheckScene == null) {
+        if (transactionStatusCheckScene == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/InvoiceStatusCheck.fxml"));
-            InvoiceStatusCheckController invoiceStatusCheckController = new InvoiceStatusCheckController(this);
-            fxmlLoader.setController(invoiceStatusCheckController);
-            invoiceStatusCheckScene = loadScene(fxmlLoader);
-            controllerMap.put(invoiceStatusCheckScene, invoiceStatusCheckController);
+            TransactionStatusCheckController transactionStatusCheckController = new TransactionStatusCheckController(this);
+            fxmlLoader.setController(transactionStatusCheckController);
+            transactionStatusCheckScene = loadScene(fxmlLoader);
+            controllerMap.put(transactionStatusCheckScene, transactionStatusCheckController);
         }
-        controllerMap.get(invoiceStatusCheckScene).onOpen();
-        window.setScene(invoiceStatusCheckScene);
+        controllerMap.get(transactionStatusCheckScene).onOpen();
+        window.setScene(transactionStatusCheckScene);
     }
 
     @Override

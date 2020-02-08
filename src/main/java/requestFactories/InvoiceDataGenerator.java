@@ -68,7 +68,6 @@ public class InvoiceDataGenerator {
         customerAddress.setDetailedAddress(customerDetailedAddress);
         customerInfo.setCustomerAddress(customerAddress);
         //</customerInfo>
-        // TODO: fiscalRepresentativeInfo kell?
         InvoiceDetailType invoiceDetail = new InvoiceDetailType();
         invoiceDetail.setInvoiceCategory(InvoiceCategoryType.NORMAL);
         try {
@@ -208,13 +207,8 @@ public class InvoiceDataGenerator {
             InvoiceReferenceType invoiceReferenceType = new InvoiceReferenceType();
             invoiceReferenceType.setOriginalInvoiceNumber(szamla.getStEredeti());
             invoiceReferenceType.setModifyWithoutMaster(false);
-//            try {
-//                invoiceReferenceType.setModificationTimestamp(DateConverter.convertTimestampToXmlGregorianCalendarWithUTC(szamla.getBekdat())); // ??
-//                invoiceReferenceType.setModificationIssueDate(DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getSzdat())); // ??
-//            } catch (DatatypeConfigurationException e) {
-//                throw new InvoiceRequestGenException(e.getMessage());
-//            }
-            invoiceType.setInvoiceReference(invoiceReferenceType); // ??
+            invoiceReferenceType.setModificationIndex(1);
+            invoiceType.setInvoiceReference(invoiceReferenceType);
         }
         invoice.setInvoiceNumber(szamla.getIktSzam());
         invoice.setInvoiceMain(invoiceMain);

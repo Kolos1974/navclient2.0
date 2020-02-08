@@ -1,6 +1,7 @@
 package config;
 
 import exception.SHA512Exception;
+import hu.gov.nav.schemas.osa._2_0.api.SoftwareOperationType;
 import utils.Algos;
 
 import java.sql.Timestamp;
@@ -21,6 +22,16 @@ public class Config {
     public static String navExport;
     public static int navMinTax;
     public static Timestamp navInvoiceDate;
+
+    // SOFTWARE ADATOK
+    public static String softwareId;
+    public static String softwareName;
+    public static SoftwareOperationType softwareOperation = SoftwareOperationType.LOCAL_SOFTWARE;
+    public static String softwareMainVersion;
+    public static String softwareDevName;
+    public static String softwareDevContact;
+    public static String softwareDevCountryCode;
+    public static String softwareDevTaxNumber;
 
     //DB ADATOK
     public static String dbUrl;

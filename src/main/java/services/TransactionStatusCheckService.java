@@ -14,7 +14,7 @@ import hu.gov.nav.schemas.osa._2_0.api.QueryTransactionStatusRequest;
 import hu.gov.nav.schemas.osa._2_0.api.QueryTransactionStatusResponse;
 import network.NetworkManager;
 import network.response.NetworkCallback;
-import requestFactories.QueryInvoiceStatusGenerator;
+import requestFactories.QueryTransactionStatusGenerator;
 import utils.XmlFormatter;
 
 import javax.xml.bind.JAXBContext;
@@ -26,15 +26,15 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
-public class InvoiceStatusCheckService extends RepeatableService {
+public class TransactionStatusCheckService extends RepeatableService {
 
     private static final String TAG = "InvoiceStatusCheckService";
 
-    private InvoiceStatusCheckService() {
+    private TransactionStatusCheckService() {
         szamlaDaoMap = DaoFactory.getSzamlaDaoMap();
     }
 
-    public static final InvoiceStatusCheckService INSTANCE  = new InvoiceStatusCheckService();
+    public static final TransactionStatusCheckService INSTANCE  = new TransactionStatusCheckService();
 
     private Map<String, Path> transactionIds = new LinkedHashMap<>();
 
@@ -75,8 +75,8 @@ public class InvoiceStatusCheckService extends RepeatableService {
                 utils.Logger.logMessage(TAG, "Checking " + navStatuses.size() + " invoice statuses from DB");
                 for (NavStatus navStatus : navStatuses) {
                     QueryTransactionStatusRequest QueryTransactionStatusRequest =
-                            QueryInvoiceStatusGenerator.INSTANCE.generateObj(navStatus.getTransactionid());
-                    NetworkManager.INSTANCE.queryInvoiceStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
+                            QueryTransactionStatusGenerator.INSTANCE.generateObj(navStatus.getTransactionid());
+                    NetworkManager.INSTANCE.queryTransactionStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
                         @Override
                         public void onSuccess(QueryTransactionStatusResponse response) {
                             if (response.getProcessingResults() == null) return;
@@ -119,8 +119,8 @@ public class InvoiceStatusCheckService extends RepeatableService {
                 String transactionId = iterator.next();
                 try {
                     QueryTransactionStatusRequest QueryTransactionStatusRequest =
-                            QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
-                    NetworkManager.INSTANCE.queryInvoiceStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
+                            QueryTransactionStatusGenerator.INSTANCE.generateObj(transactionId);
+                    NetworkManager.INSTANCE.queryTransactionStatus(QueryTransactionStatusRequest, new NetworkCallback<QueryTransactionStatusResponse>() {
                         @Override
                         public void onSuccess(QueryTransactionStatusResponse response) {
                             String status = response.getProcessingResults().getProcessingResult().get(0).getInvoiceStatus().value();

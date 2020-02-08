@@ -39,17 +39,17 @@ public class NavStatusDao extends BaseDao {
                              " WHERE NOT INVOICESTATUS = '" + Szamla.States.DONE.name() + "'"
                      + " AND NOT INVOICESTATUS = '" + Szamla.States.ABORTED.name() + "';"
         );
-        ResultSet invoiceStatusResultSet = pstmt.executeQuery();
+        ResultSet transactionStatusResultSet = pstmt.executeQuery();
         ){
             List<NavStatus> navStatusList = new ArrayList<>();
-            while (invoiceStatusResultSet.next()) {
+            while (transactionStatusResultSet.next()) {
                 NavStatus navStatus = new NavStatus();
-                navStatus.setDatum(invoiceStatusResultSet.getTimestamp("DATUM"));
-                navStatus.setRequestid(invoiceStatusResultSet.getString("REQUESTID"));
-                navStatus.setTransactionid(invoiceStatusResultSet.getString("TRANSACTIONID"));
-                navStatus.setInvoicestatus(invoiceStatusResultSet.getString("INVOICESTATUS"));
-                navStatus.setIktszam(invoiceStatusResultSet.getString("IKTSZAM"));
-                navStatus.setId(invoiceStatusResultSet.getInt("ID"));
+                navStatus.setDatum(transactionStatusResultSet.getTimestamp("DATUM"));
+                navStatus.setRequestid(transactionStatusResultSet.getString("REQUESTID"));
+                navStatus.setTransactionid(transactionStatusResultSet.getString("TRANSACTIONID"));
+                navStatus.setInvoicestatus(transactionStatusResultSet.getString("INVOICESTATUS"));
+                navStatus.setIktszam(transactionStatusResultSet.getString("IKTSZAM"));
+                navStatus.setId(transactionStatusResultSet.getInt("ID"));
                 navStatusList.add(navStatus);
             }
             return navStatusList;

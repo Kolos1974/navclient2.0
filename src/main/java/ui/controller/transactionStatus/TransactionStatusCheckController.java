@@ -1,4 +1,4 @@
-package ui.controller.invoiceStatus;
+package ui.controller.transactionStatus;
 
 import exception.QueryInvoiceStatusGenException;
 import exception.XmlPrettifyException;
@@ -13,12 +13,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import network.NetworkManager;
 import network.response.NetworkCallback;
-import requestFactories.QueryInvoiceStatusGenerator;
+import requestFactories.QueryTransactionStatusGenerator;
 import ui.Coordinator;
 import ui.controller.BaseController;
 import utils.XmlFormatter;
 
-public class InvoiceStatusCheckController extends BaseController implements NetworkCallback<QueryTransactionStatusResponse> {
+public class TransactionStatusCheckController extends BaseController implements NetworkCallback<QueryTransactionStatusResponse> {
 
     private static final String TAG = "InvoiceStatusCheckController";
 
@@ -35,7 +35,7 @@ public class InvoiceStatusCheckController extends BaseController implements Netw
     @FXML
     private HBox errorBox;
 
-    public InvoiceStatusCheckController(Coordinator coordinator) {
+    public TransactionStatusCheckController(Coordinator coordinator) {
         super(coordinator);
     }
 
@@ -50,8 +50,8 @@ public class InvoiceStatusCheckController extends BaseController implements Netw
         if (transactionId.equals("")) return;
         clearFields();
         try {
-            QueryTransactionStatusRequest QueryTransactionStatusRequest = QueryInvoiceStatusGenerator.INSTANCE.generateObj(transactionId);
-            NetworkManager.INSTANCE.queryInvoiceStatus(QueryTransactionStatusRequest, this);
+            QueryTransactionStatusRequest queryTransactionStatusRequest = QueryTransactionStatusGenerator.INSTANCE.generateObj(transactionId);
+            NetworkManager.INSTANCE.queryTransactionStatus(queryTransactionStatusRequest, this);
         } catch (QueryInvoiceStatusGenException e) {
             e.printStackTrace();
         }

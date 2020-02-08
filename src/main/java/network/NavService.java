@@ -26,8 +26,8 @@ public interface NavService {
             "Accept: application/xml",
             "Content-Type: application/xml"
     })
-    @POST("queryInvoiceStatus")
-    Call<QueryTransactionStatusResponse> queryInvoiceStatus(@Body QueryTransactionStatusRequest request);
+    @POST("queryTransactionStatus")
+    Call<QueryTransactionStatusResponse> queryTransactionStatus(@Body QueryTransactionStatusRequest request);
 
     @Headers({
             "Accept: application/xml",

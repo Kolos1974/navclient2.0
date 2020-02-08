@@ -2,6 +2,8 @@ package utils;
 
 import exception.AES128Exception;
 import exception.SHA512Exception;
+import org.bouncycastle.jcajce.provider.digest.SHA3;
+import org.bouncycastle.util.encoders.Hex;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -36,6 +38,12 @@ public class Algos {
         } catch (NoSuchAlgorithmException e) {
             throw new SHA512Exception("Error while generating SHA512");
         }
+    }
+
+    public static String generateSha3512From(String m) {
+        SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest512();
+        byte[] digest = digestSHA3.digest(m.getBytes());
+        return Hex.toHexString(digest);
     }
 
     public static String decryptAES128(byte[] cipherText, String key) throws AES128Exception {
