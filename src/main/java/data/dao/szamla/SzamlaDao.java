@@ -30,7 +30,7 @@ public abstract class SzamlaDao extends BaseDao {
              )) {
             pstmt.setTimestamp(1, Config.navInvoiceDate);
             pstmt.setInt(2, Config.navMinTax);
-            try(ResultSet szamlaResultSet = pstmt.executeQuery()){
+            try (ResultSet szamlaResultSet = pstmt.executeQuery()) {
                 List<Szamla> szamlak = new ArrayList<>();
                 while (szamlaResultSet.next()) {
                     Szamla szamla = getSzamlaFromResultSet(szamlaResultSet);
@@ -83,7 +83,8 @@ public abstract class SzamlaDao extends BaseDao {
         szamla.setType(getType());
         if (getType() == Szamla.SzamlaType.V) {
             szamla.setIktSzam(Integer.toString(rs.getInt("IKTSZAM")).trim());
-            szamla.setStEredeti(Integer.toString(rs.getInt("ST_Eredeti")).trim());
+            int stEredeti = rs.getInt("ST_Eredeti");
+            szamla.setStEredeti(rs.wasNull() ? null : Integer.toString(stEredeti).trim());
         } else {
             szamla.setIktSzam(rs.getString("IKTSZAM").trim());
             String stEredeti = rs.getString("ST_Eredeti");
