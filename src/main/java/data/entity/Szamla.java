@@ -10,7 +10,7 @@ import java.util.Map;
 public class Szamla {
 
     public enum SzamlaType {
-        B, V, K, G, P, Z, O
+        B, V, K, G, P, Z, O, DV
     }
 
     public enum States {
@@ -28,9 +28,7 @@ public class Szamla {
     //NOTE: most konstans
     private String category = "NORMAL";
     private Timestamp szdat;
-    //NOTE: most konstans
-    private String currencyCode = "HUF";
-    private BigDecimal exchRate = new BigDecimal(1);
+    private double exchangeRate;
 	private String fizmodkod;
     private Timestamp esdat;
     //NOTE: most konstans
@@ -39,6 +37,7 @@ public class Szamla {
     private Timestamp bekdat;
     private Timestamp szidoszTol;
     private Timestamp szidoszIg;
+    private String devizaNem;
 
     //OTHER TABLE
     private List<SzamlaTetel> tetels = new ArrayList<>();
@@ -103,14 +102,6 @@ public class Szamla {
 
     public void setSzdat(Timestamp szdat) {
         this.szdat = szdat;
-    }
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
     }
 
     public String getFizmodkod() {
@@ -196,14 +187,18 @@ public class Szamla {
     public OverallSummary getOverallSummary() {
         return overallSummary;
     }
-        
-    public BigDecimal getExchRate() {
-		return exchRate;
-	}
 
-	public void setExchRate(BigDecimal exchRate) {
-		this.exchRate = exchRate;
-	}
+    public void setDevizaNem(String devizaNem) {
+        this.devizaNem = devizaNem;
+    }
+
+    public double getExchangeRate() {
+        return exchangeRate;
+    }
+
+    public void setExchangeRate(double exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
 
     public void calculateSummeries() {
         vatSummeries = new HashMap<>();
@@ -231,6 +226,11 @@ public class Szamla {
 
     public boolean isStorno() {
         return stEredeti != null && !stEredeti.isEmpty();
+    }
+
+    public String getDevizaNem() {
+        if (this.devizaNem == null) return "HUF";
+        return this.devizaNem;
     }
 
 }
