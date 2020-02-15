@@ -71,7 +71,7 @@ public class InvoiceDataGenerator {
         InvoiceDetailType invoiceDetail = new InvoiceDetailType();
         invoiceDetail.setInvoiceCategory(InvoiceCategoryType.NORMAL);
         boolean isSzamlaV = szamla.getType() == Szamla.SzamlaType.V;
-        boolean isSzamlaDV = szamla.getType() == Szamla.SzamlaType.DV;
+        boolean isSzamlaDV = szamla.isDeviza();
         try {
             XMLGregorianCalendar invoiceIssueDate = DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getSzdat());
             invoiceIssueDate.setTimezone(DatatypeConstants.FIELD_UNDEFINED);

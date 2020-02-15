@@ -218,23 +218,31 @@ public class Szamla {
             vatSummary.addToAfaAlap(afaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
             vatSummary.addToAfaErtek(afaertek);
             vatSummary.addToBrutto(brutto);
-            vatSummary.addToDevizaAfaAlap(devizaAfaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
-            vatSummary.addToDevizaAfaErtek(devizaAfaertek);
-            vatSummary.addToDevizaBrutto(devizaBrutto);
+            if (this.isDeviza()) {
+                vatSummary.addToDevizaAfaAlap(devizaAfaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
+                vatSummary.addToDevizaAfaErtek(devizaAfaertek);
+                vatSummary.addToDevizaBrutto(devizaBrutto);
+            }
             vatSummeries.putIfAbsent(tetel.getAfaSzazalek(), vatSummary);
 
             //Overall
             overallSummary.addToAfaAlap(afaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
             overallSummary.addToAfaErtek(afaertek);
             overallSummary.addToBrutto(brutto);
-            overallSummary.addToDevizaAfaAlap(devizaAfaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
-            overallSummary.addToDevizaAfaErtek(devizaAfaertek);
-            overallSummary.addToDevizaBrutto(devizaBrutto);
+            if (this.isDeviza()) {
+                overallSummary.addToDevizaAfaAlap(devizaAfaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
+                overallSummary.addToDevizaAfaErtek(devizaAfaertek);
+                overallSummary.addToDevizaBrutto(devizaBrutto);
+            }
         }
     }
 
     public boolean isStorno() {
         return stEredeti != null && !stEredeti.isEmpty();
+    }
+
+    public boolean isDeviza() {
+        return this.type == SzamlaType.DV;
     }
 
     public String getDevizaNem() {
