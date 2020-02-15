@@ -166,30 +166,33 @@ public class InvoiceDataGenerator {
             vatRateSum.setVatPercentage(value.getAfaSzazalek().divide(bigDecimal100).stripTrailingZeros());
             summaryByVatRate.setVatRate(vatRateSum);
             VatRateNetDataType vatRateNetData = new VatRateNetDataType();
-            vatRateNetData.setVatRateNetAmount(value.getAfaalapSum());
+            vatRateNetData.setVatRateNetAmount(isSzamlaDV ? value.getDevizaAfaalapSum() : value.getAfaalapSum());
             vatRateNetData.setVatRateNetAmountHUF(value.getAfaalapSum());
             summaryByVatRate.setVatRateNetData(vatRateNetData);
             VatRateVatDataType vatRateVatData = new VatRateVatDataType();
-            vatRateVatData.setVatRateVatAmount(value.getAfaertekSum());
+            vatRateVatData.setVatRateVatAmount(isSzamlaDV ? value.getDevizaAfaertekSum() : value.getAfaertekSum());
             vatRateVatData.setVatRateVatAmountHUF(value.getAfaertekSum());
             summaryByVatRate.setVatRateVatData(vatRateVatData);
             VatRateGrossDataType vatRateGrossData = new VatRateGrossDataType();
-            vatRateGrossData.setVatRateGrossAmount(value.getBruttoSum());
+            vatRateGrossData.setVatRateGrossAmount(isSzamlaDV ? value.getDevizaBruttoSum() : value.getBruttoSum());
             vatRateGrossData.setVatRateGrossAmountHUF(value.getBruttoSum());
             summaryByVatRate.setVatRateGrossData(vatRateGrossData);
             summaryNormal.getSummaryByVatRate().add(summaryByVatRate);
         }
         //</summaryByVatRate>
         OverallSummary overallSummary = szamla.getOverallSummary();
-        summaryNormal.setInvoiceNetAmount(overallSummary.getAfaalapOverallSum());
+        summaryNormal.setInvoiceNetAmount(isSzamlaDV ?
+                overallSummary.getDevizaAfaalapOverallSum() : overallSummary.getAfaalapOverallSum());
         summaryNormal.setInvoiceNetAmountHUF(overallSummary.getAfaalapOverallSum());
-        summaryNormal.setInvoiceVatAmount(overallSummary.getAfaertekOverallSum());
+        summaryNormal.setInvoiceVatAmount(isSzamlaDV ?
+                overallSummary.getDevizaAfaertekOverallSum() : overallSummary.getAfaertekOverallSum());
         summaryNormal.setInvoiceVatAmountHUF(overallSummary.getAfaertekOverallSum());
         //</summaryNormal>
         invoiceSummary.setSummaryNormal(summaryNormal);
         // <summaryGrossData>
         SummaryGrossDataType summaryGrossData = new SummaryGrossDataType();
-        summaryGrossData.setInvoiceGrossAmount(overallSummary.getBruttoOverallSum());
+        summaryGrossData.setInvoiceGrossAmount(isSzamlaDV ?
+                overallSummary.getDevizaBruttoOverallSum() : overallSummary.getBruttoOverallSum());
         summaryGrossData.setInvoiceGrossAmountHUF(overallSummary.getBruttoOverallSum());
         invoiceSummary.setSummaryGrossData(summaryGrossData);
         //</invoiceSummary>

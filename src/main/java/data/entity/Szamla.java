@@ -212,15 +212,24 @@ public class Szamla {
             BigDecimal afaalap = tetel.getAfaalap();
             BigDecimal afaertek = tetel.getAfaertek();
             BigDecimal brutto = tetel.getBrutto();
+            BigDecimal devizaAfaalap = tetel.getDevizaAfaalap();
+            BigDecimal devizaAfaertek = tetel.getDevizaAfaertek();
+            BigDecimal devizaBrutto = tetel.getDevizaBrutto();
             vatSummary.addToAfaAlap(afaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
             vatSummary.addToAfaErtek(afaertek);
             vatSummary.addToBrutto(brutto);
+            vatSummary.addToDevizaAfaAlap(devizaAfaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
+            vatSummary.addToDevizaAfaErtek(devizaAfaertek);
+            vatSummary.addToDevizaBrutto(devizaBrutto);
             vatSummeries.putIfAbsent(tetel.getAfaSzazalek(), vatSummary);
 
             //Overall
             overallSummary.addToAfaAlap(afaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
             overallSummary.addToAfaErtek(afaertek);
             overallSummary.addToBrutto(brutto);
+            overallSummary.addToDevizaAfaAlap(devizaAfaalap.setScale(0, BigDecimal.ROUND_HALF_UP));
+            overallSummary.addToDevizaAfaErtek(devizaAfaertek);
+            overallSummary.addToDevizaBrutto(devizaBrutto);
         }
     }
 

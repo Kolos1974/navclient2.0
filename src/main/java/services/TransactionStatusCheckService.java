@@ -85,7 +85,7 @@ public class TransactionStatusCheckService extends RepeatableService {
                             try {
                                 navStatusDao.updateStatus(navStatus);
                                 String iktszam = navStatus.getIktszam();
-                                szamlaDaoMap.get(getTypeFromIktSzam(iktszam)).updateStatusz(iktszam, status);
+                                szamlaDaoMap.get(getTypeFromNavStatus(navStatus)).updateStatusz(iktszam, status);
                                 if (status.equals(Szamla.States.DONE.name()) || status.equals(Szamla.States.ABORTED.name())) {
                                     File file = new File(Config.navExport + "\\" + iktszam.replace("/", "_").trim() + "_" + navStatus.getRequestid() + "_" + status + ".xml");
                                     writeStatusResponseToFile(response, file);
@@ -148,7 +148,12 @@ public class TransactionStatusCheckService extends RepeatableService {
             }
         }
 
-        private Szamla.SzamlaType getTypeFromIktSzam(String iktszam) {
+        private Szamla.SzamlaType getTypeFromNavStatus(NavStatus navStatus) {
+            String type = navStatus.getType();
+            if (type != null) {
+                return Szamla.SzamlaType.valueOf(type);
+            }
+            String iktszam = navStatus.getIktszam();
             String firstLetter = iktszam.substring(0, 1);
             if (firstLetter.equals("V")) return Szamla.SzamlaType.Z;
             try {

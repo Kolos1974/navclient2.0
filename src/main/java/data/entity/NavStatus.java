@@ -6,6 +6,7 @@ public class NavStatus {
 
     private int id;
     private String iktszam;
+    private String type;
     private String requestid;
     private String transactionid;
     private String invoicestatus;
@@ -25,6 +26,14 @@ public class NavStatus {
 
     public void setIktszam(String iktszam) {
         this.iktszam = iktszam;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getRequestid() {
