@@ -88,6 +88,8 @@ public abstract class SzamlaDao extends BaseDao {
             if (getType() == Szamla.SzamlaType.DV) {
                 szamla.setDevizaNem(rs.getString("Devizanem"));
                 szamla.setExchangeRate(rs.getDouble("Ertek"));
+            } else {
+                szamla.setExchangeRate(1);
             }
         } else {
             szamla.setIktSzam(rs.getString("IKTSZAM").trim());
