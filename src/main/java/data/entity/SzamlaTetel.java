@@ -17,6 +17,11 @@ public class SzamlaTetel {
     private BigDecimal brutto;
     private String kozvSzolg;
 
+    //deviza
+    private BigDecimal devizaAfaalap;
+    private BigDecimal devizaAfaertek;
+    private BigDecimal devizaBrutto;
+
     public String getKozvSzolg() {
         return kozvSzolg;
     }
@@ -111,5 +116,29 @@ public class SzamlaTetel {
 
     public void setBrutto(BigDecimal brutto) {
         this.brutto = brutto;
+    }
+
+    public BigDecimal getDevizaAfaalap() {
+        return devizaAfaalap;
+    }
+
+    public void setDevizaAfaalap(BigDecimal devizaAfaalap) {
+        this.devizaAfaalap = devizaAfaalap;
+    }
+
+    public BigDecimal getDevizaAfaertek() {
+        return devizaAfaertek;
+    }
+
+    public void setDevizaAfaertek(BigDecimal devizaAfaertek) {
+        this.devizaAfaertek = devizaAfaertek;
+    }
+
+    public BigDecimal getDevizaBrutto() {
+        return devizaBrutto;
+    }
+
+    public void setDevizaBrutto(BigDecimal devizaBrutto) {
+        this.devizaBrutto = devizaBrutto;
     }
 }

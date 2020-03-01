@@ -119,6 +119,7 @@ public class InvoiceSenderFromDbService extends RepeatableService {
                 szamlaDaoMap.get(szamla.getType()).updateStatusz(szamla.getIktSzam(), Szamla.States.RECEIVED.name());
                 NavStatus navStatus = new NavStatus();
                 navStatus.setIktszam(szamla.getIktSzam());
+                navStatus.setType(szamla.getType().name());
                 navStatus.setInvoicestatus(Szamla.States.RECEIVED.name());
                 navStatus.setTransactionid(transId);
                 navStatus.setRequestid(requestId);

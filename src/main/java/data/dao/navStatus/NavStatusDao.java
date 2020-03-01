@@ -17,15 +17,16 @@ public class NavStatusDao extends BaseDao {
     public void insert(NavStatus navStatus) throws DatabaseException {
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
-                     "INSERT INTO " + getTableName() + " (IKTSZAM, REQUESTID, TRANSACTIONID, INVOICESTATUS, DATUM) " +
-                             "VALUES (?,?,?,?,?)"
+                     "INSERT INTO " + getTableName() + " (IKTSZAM, TYPE, REQUESTID, TRANSACTIONID, INVOICESTATUS, DATUM) " +
+                             "VALUES (?,?,?,?,?,?)"
              )
         ) {
             pstmt.setString(1, navStatus.getIktszam());
-            pstmt.setString(2, navStatus.getRequestid());
-            pstmt.setString(3, navStatus.getTransactionid());
-            pstmt.setString(4, navStatus.getInvoicestatus());
-            pstmt.setTimestamp(5, navStatus.getDatum());
+            pstmt.setString(2, navStatus.getType());
+            pstmt.setString(3, navStatus.getRequestid());
+            pstmt.setString(4, navStatus.getTransactionid());
+            pstmt.setString(5, navStatus.getInvoicestatus());
+            pstmt.setTimestamp(6, navStatus.getDatum());
             pstmt.execute();
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
@@ -49,6 +50,7 @@ public class NavStatusDao extends BaseDao {
                 navStatus.setTransactionid(transactionStatusResultSet.getString("TRANSACTIONID"));
                 navStatus.setInvoicestatus(transactionStatusResultSet.getString("INVOICESTATUS"));
                 navStatus.setIktszam(transactionStatusResultSet.getString("IKTSZAM"));
+                navStatus.setType(transactionStatusResultSet.getString("TYPE"));
                 navStatus.setId(transactionStatusResultSet.getInt("ID"));
                 navStatusList.add(navStatus);
             }

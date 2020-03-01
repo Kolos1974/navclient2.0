@@ -129,9 +129,11 @@ public class MainController extends BaseController {
                     Config.navImport = scanner.next();
                     Config.navExport = scanner.next();
                     Config.softwareId = scanner.next();
-                    Config.softwareName = scanner.next();
+                    scanner.nextLine();
+                    Config.softwareName = scanner.nextLine();
                     Config.softwareMainVersion = scanner.next();
-                    Config.softwareDevName = scanner.next();
+                    scanner.nextLine();
+                    Config.softwareDevName = scanner.nextLine();
                     Config.softwareDevContact = scanner.next();
                     Config.softwareDevCountryCode = scanner.next();
                     Config.softwareDevTaxNumber = scanner.next();

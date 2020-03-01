@@ -70,6 +70,8 @@ public class InvoiceDataGenerator {
         //</customerInfo>
         InvoiceDetailType invoiceDetail = new InvoiceDetailType();
         invoiceDetail.setInvoiceCategory(InvoiceCategoryType.NORMAL);
+        boolean isSzamlaV = szamla.getType() == Szamla.SzamlaType.V;
+        boolean isSzamlaDV = szamla.isDeviza();
         try {
             XMLGregorianCalendar invoiceIssueDate = DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getSzdat());
             invoiceIssueDate.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
@@ -80,7 +82,7 @@ public class InvoiceDataGenerator {
             XMLGregorianCalendar invoiceDeliveryDate = DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getTeljdat());
             invoiceDeliveryDate.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
             invoiceDetail.setInvoiceDeliveryDate(invoiceDeliveryDate);
-            if (szamla.getType() != Szamla.SzamlaType.V) {
+            if (!isSzamlaV && !isSzamlaDV) {
                 invoiceDetail.setInvoiceDeliveryPeriodStart(DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getSzidoszTol()));
                 invoiceDetail.setInvoiceDeliveryPeriodEnd(DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getSzidoszIg()));
                 invoiceDetail.setInvoiceAccountingDeliveryDate(DateConverter.convertTimestampToXmlGregorianCalendarNoUTC(szamla.getSzidoszIg()));
@@ -88,8 +90,8 @@ public class InvoiceDataGenerator {
         } catch (DatatypeConfigurationException e) {
             throw new InvoiceRequestGenException(e.getMessage());
         }
-        invoiceDetail.setCurrencyCode(szamla.getCurrencyCode());
-        invoiceDetail.setExchangeRate(szamla.getExchRate());
+        invoiceDetail.setCurrencyCode(szamla.getDevizaNem());
+        invoiceDetail.setExchangeRate(BigDecimal.valueOf(szamla.getExchangeRate()));
         invoiceDetail.setPaymentMethod(szamla.getFizmodkod().equals("2") ?
                 PaymentMethodType.TRANSFER : PaymentMethodType.CASH);
         invoiceDetail.setInvoiceAppearance(InvoiceAppearanceType.PAPER);
@@ -127,18 +129,18 @@ public class InvoiceDataGenerator {
             line.setUnitPrice(tetel.getEgysegAr());
             LineAmountsNormalType lineAmountsNormal = new LineAmountsNormalType();
             LineNetAmountDataType lineNetAmountData = new LineNetAmountDataType();
-            lineNetAmountData.setLineNetAmount(tetel.getAfaalap());
+            lineNetAmountData.setLineNetAmount(isSzamlaDV ? tetel.getDevizaAfaalap() : tetel.getAfaalap());
             lineNetAmountData.setLineNetAmountHUF(tetel.getAfaalap());
             lineAmountsNormal.setLineNetAmountData(lineNetAmountData);
             VatRateType vatRate = new VatRateType();
             vatRate.setVatPercentage(tetel.getAfaSzazalek().divide(bigDecimal100).stripTrailingZeros());
             lineAmountsNormal.setLineVatRate(vatRate);
             LineVatDataType lineVatData = new LineVatDataType();
-            lineVatData.setLineVatAmount(tetel.getAfaertek());
+            lineVatData.setLineVatAmount(isSzamlaDV ? tetel.getDevizaAfaertek() : tetel.getAfaertek());
             lineVatData.setLineVatAmountHUF(tetel.getAfaertek());
             lineAmountsNormal.setLineVatData(lineVatData);
             LineGrossAmountDataType lineGrossAmountData = new LineGrossAmountDataType();
-            lineGrossAmountData.setLineGrossAmountNormal(tetel.getBrutto());
+            lineGrossAmountData.setLineGrossAmountNormal(isSzamlaDV ? tetel.getDevizaBrutto() : tetel.getBrutto());
             lineGrossAmountData.setLineGrossAmountNormalHUF(tetel.getBrutto());
             lineAmountsNormal.setLineGrossAmountData(lineGrossAmountData);
             line.setLineAmountsNormal(lineAmountsNormal);
@@ -164,30 +166,33 @@ public class InvoiceDataGenerator {
             vatRateSum.setVatPercentage(value.getAfaSzazalek().divide(bigDecimal100).stripTrailingZeros());
             summaryByVatRate.setVatRate(vatRateSum);
             VatRateNetDataType vatRateNetData = new VatRateNetDataType();
-            vatRateNetData.setVatRateNetAmount(value.getAfaalapSum());
+            vatRateNetData.setVatRateNetAmount(isSzamlaDV ? value.getDevizaAfaalapSum() : value.getAfaalapSum());
             vatRateNetData.setVatRateNetAmountHUF(value.getAfaalapSum());
             summaryByVatRate.setVatRateNetData(vatRateNetData);
             VatRateVatDataType vatRateVatData = new VatRateVatDataType();
-            vatRateVatData.setVatRateVatAmount(value.getAfaertekSum());
+            vatRateVatData.setVatRateVatAmount(isSzamlaDV ? value.getDevizaAfaertekSum() : value.getAfaertekSum());
             vatRateVatData.setVatRateVatAmountHUF(value.getAfaertekSum());
             summaryByVatRate.setVatRateVatData(vatRateVatData);
             VatRateGrossDataType vatRateGrossData = new VatRateGrossDataType();
-            vatRateGrossData.setVatRateGrossAmount(value.getBruttoSum());
+            vatRateGrossData.setVatRateGrossAmount(isSzamlaDV ? value.getDevizaBruttoSum() : value.getBruttoSum());
             vatRateGrossData.setVatRateGrossAmountHUF(value.getBruttoSum());
             summaryByVatRate.setVatRateGrossData(vatRateGrossData);
             summaryNormal.getSummaryByVatRate().add(summaryByVatRate);
         }
         //</summaryByVatRate>
         OverallSummary overallSummary = szamla.getOverallSummary();
-        summaryNormal.setInvoiceNetAmount(overallSummary.getAfaalapOverallSum());
+        summaryNormal.setInvoiceNetAmount(isSzamlaDV ?
+                overallSummary.getDevizaAfaalapOverallSum() : overallSummary.getAfaalapOverallSum());
         summaryNormal.setInvoiceNetAmountHUF(overallSummary.getAfaalapOverallSum());
-        summaryNormal.setInvoiceVatAmount(overallSummary.getAfaertekOverallSum());
+        summaryNormal.setInvoiceVatAmount(isSzamlaDV ?
+                overallSummary.getDevizaAfaertekOverallSum() : overallSummary.getAfaertekOverallSum());
         summaryNormal.setInvoiceVatAmountHUF(overallSummary.getAfaertekOverallSum());
         //</summaryNormal>
         invoiceSummary.setSummaryNormal(summaryNormal);
         // <summaryGrossData>
         SummaryGrossDataType summaryGrossData = new SummaryGrossDataType();
-        summaryGrossData.setInvoiceGrossAmount(overallSummary.getBruttoOverallSum());
+        summaryGrossData.setInvoiceGrossAmount(isSzamlaDV ?
+                overallSummary.getDevizaBruttoOverallSum() : overallSummary.getBruttoOverallSum());
         summaryGrossData.setInvoiceGrossAmountHUF(overallSummary.getBruttoOverallSum());
         invoiceSummary.setSummaryGrossData(summaryGrossData);
         //</invoiceSummary>
@@ -282,11 +287,7 @@ public class InvoiceDataGenerator {
     }
 
     public static boolean isNAVUnitOfMeasure(String unitOfLine) {
-        if (!(unitOfMeasure(unitOfLine) == UnitOfMeasureType.OWN)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !(unitOfMeasure(unitOfLine) == UnitOfMeasureType.OWN);
     }
 
 

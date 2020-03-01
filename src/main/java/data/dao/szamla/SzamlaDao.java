@@ -30,7 +30,7 @@ public abstract class SzamlaDao extends BaseDao {
              )) {
             pstmt.setTimestamp(1, Config.navInvoiceDate);
             pstmt.setInt(2, Config.navMinTax);
-            try(ResultSet szamlaResultSet = pstmt.executeQuery()){
+            try (ResultSet szamlaResultSet = pstmt.executeQuery()) {
                 List<Szamla> szamlak = new ArrayList<>();
                 while (szamlaResultSet.next()) {
                     Szamla szamla = getSzamlaFromResultSet(szamlaResultSet);
@@ -69,7 +69,7 @@ public abstract class SzamlaDao extends BaseDao {
                      "UPDATE " + getTableName() + " SET STATUS = ? WHERE IKTSZAM = ?")
         ) {
             preparedStatement.setString(1, status);
-            if (getType() == Szamla.SzamlaType.V)
+            if (getType() == Szamla.SzamlaType.V || getType() == Szamla.SzamlaType.DV)
                 preparedStatement.setInt(2, Integer.parseInt(id));
             else preparedStatement.setString(2, id);
             return preparedStatement.execute();
@@ -81,15 +81,23 @@ public abstract class SzamlaDao extends BaseDao {
     private Szamla getSzamlaFromResultSet(ResultSet rs) throws SQLException {
         Szamla szamla = new Szamla();
         szamla.setType(getType());
-        if (getType() == Szamla.SzamlaType.V) {
+        if (getType() == Szamla.SzamlaType.V || getType() == Szamla.SzamlaType.DV) {
             szamla.setIktSzam(Integer.toString(rs.getInt("IKTSZAM")).trim());
-            szamla.setStEredeti(Integer.toString(rs.getInt("ST_Eredeti")).trim());
+            int stEredeti = rs.getInt("ST_Eredeti");
+            szamla.setStEredeti(rs.wasNull() ? null : Integer.toString(stEredeti).trim());
+            if (getType() == Szamla.SzamlaType.DV) {
+                szamla.setDevizaNem(rs.getString("Devizanem"));
+                szamla.setExchangeRate(rs.getDouble("Ertek"));
+            } else {
+                szamla.setExchangeRate(1);
+            }
         } else {
             szamla.setIktSzam(rs.getString("IKTSZAM").trim());
             String stEredeti = rs.getString("ST_Eredeti");
             szamla.setStEredeti(stEredeti != null ? stEredeti.trim() : null);
             szamla.setSzidoszTol(rs.getTimestamp("SZIDOSZTOL"));
             szamla.setSzidoszIg(rs.getTimestamp("SZIDOSZIG"));
+            szamla.setExchangeRate(1);
         }
         szamla.setSzekod(rs.getString("SZEKOD"));
         szamla.setSzdat(rs.getTimestamp("SZDAT"));
@@ -126,6 +134,11 @@ public abstract class SzamlaDao extends BaseDao {
         tetel.setBrutto(rs.getBigDecimal("BRUTTO"));
         tetel.setIktSzam(rs.getString("IKTSZAM"));
         tetel.setKozvSzolg(rs.getString("KOZVSZOLG"));
+        try {
+            tetel.setDevizaAfaalap(rs.getBigDecimal("DevizaAFAALAP"));
+            tetel.setDevizaAfaertek(rs.getBigDecimal("DevizaAfaErtek"));
+            tetel.setDevizaBrutto(rs.getBigDecimal("DevizaBrutto"));
+        } catch (SQLException ignored) {}
         return tetel;
     }
 
