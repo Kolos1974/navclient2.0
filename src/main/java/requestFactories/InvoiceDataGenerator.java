@@ -144,7 +144,7 @@ public class InvoiceDataGenerator {
             lineGrossAmountData.setLineGrossAmountNormalHUF(tetel.getBrutto());
             lineAmountsNormal.setLineGrossAmountData(lineGrossAmountData);
             line.setLineAmountsNormal(lineAmountsNormal);
-            if (szamla.isStorno()) {
+            if (szamla.isStorno() || szamla.isModified()) {
                 LineModificationReferenceType lineModificationReferenceType = new LineModificationReferenceType();
                 int numberOfTetels = szamla.getTetels().size();
                 lineModificationReferenceType.setLineNumberReference(BigInteger.valueOf(tetel.getTetelsorsz() + numberOfTetels));
@@ -207,8 +207,8 @@ public class InvoiceDataGenerator {
         InvoiceMainType invoiceMain = new InvoiceMainType();
         invoiceMain.setInvoice(invoiceType);
 
-        //ST_EREDETI SZEREPEL
-        if (szamla.isStorno()) {
+        //ST_EREDETI VAGY MOD_EREDETI SZEREPEL
+        if (szamla.isStorno() || szamla.isModified()) {
             InvoiceReferenceType invoiceReferenceType = new InvoiceReferenceType();
             invoiceReferenceType.setOriginalInvoiceNumber(szamla.getStEredeti());
             invoiceReferenceType.setModifyWithoutMaster(false);

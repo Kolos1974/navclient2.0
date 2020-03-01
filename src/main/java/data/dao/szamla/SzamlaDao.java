@@ -85,6 +85,8 @@ public abstract class SzamlaDao extends BaseDao {
             szamla.setIktSzam(Integer.toString(rs.getInt("IKTSZAM")).trim());
             int stEredeti = rs.getInt("ST_Eredeti");
             szamla.setStEredeti(rs.wasNull() ? null : Integer.toString(stEredeti).trim());
+            int modEredeti = rs.getInt("Mod_Eredeti");
+            szamla.setModEredeti(rs.wasNull() ? null : Integer.toString(modEredeti).trim());
             if (getType() == Szamla.SzamlaType.DV) {
                 szamla.setDevizaNem(rs.getString("Devizanem"));
                 szamla.setExchangeRate(rs.getDouble("Ertek"));
@@ -95,6 +97,8 @@ public abstract class SzamlaDao extends BaseDao {
             szamla.setIktSzam(rs.getString("IKTSZAM").trim());
             String stEredeti = rs.getString("ST_Eredeti");
             szamla.setStEredeti(stEredeti != null ? stEredeti.trim() : null);
+            String modEredeti = rs.getString("Mod_Eredeti");
+            szamla.setModEredeti(modEredeti != null ? modEredeti.trim() : null);
             szamla.setSzidoszTol(rs.getTimestamp("SZIDOSZTOL"));
             szamla.setSzidoszIg(rs.getTimestamp("SZIDOSZIG"));
             szamla.setExchangeRate(1);

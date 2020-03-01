@@ -25,7 +25,8 @@ public class ManageInvoiceGenerator {
 
     public static ManageInvoiceGenerator INSTANCE = new ManageInvoiceGenerator();
 
-    private ManageInvoiceGenerator() {}
+    private ManageInvoiceGenerator() {
+    }
 
     private InvoiceDataGenerator invoiceDataGenerator = new InvoiceDataGenerator();
 
@@ -33,6 +34,8 @@ public class ManageInvoiceGenerator {
         InvoiceData invoice = invoiceDataGenerator.generateObject(szamla);
         if (szamla.isStorno())
             return createManageInvoiceRequest(invoice, exchangeToken, ManageInvoiceOperationType.STORNO);
+        else if (szamla.isModified())
+            return createManageInvoiceRequest(invoice, exchangeToken, ManageInvoiceOperationType.MODIFY);
         else return createManageInvoiceRequest(invoice, exchangeToken, null);
     }
 
@@ -84,7 +87,7 @@ public class ManageInvoiceGenerator {
             manageInvoiceRequest.setSoftware(softwareType);
             return manageInvoiceRequest;
 
-        } catch ( JAXBException | SHA512Exception | DatatypeConfigurationException e) {
+        } catch (JAXBException | SHA512Exception | DatatypeConfigurationException e) {
             throw new InvoiceRequestGenException("Hiba az InvoiceData generalas soran: " + e.getMessage());
         }
     }

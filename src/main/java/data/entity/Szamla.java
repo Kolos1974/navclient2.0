@@ -24,6 +24,7 @@ public class Szamla {
     private SzamlaType type;
     private String iktSzam;
     private String stEredeti;
+    private String modEredeti;
     private String szekod;
     //NOTE: most konstans
     private String category = "NORMAL";
@@ -78,6 +79,14 @@ public class Szamla {
 
     public void setStEredeti(String stEredeti) {
         this.stEredeti = stEredeti;
+    }
+
+    public String getModEredeti() {
+        return modEredeti;
+    }
+
+    public void setModEredeti(String modEredeti) {
+        this.modEredeti = modEredeti;
     }
 
     public Timestamp getBekdat() {
@@ -239,6 +248,10 @@ public class Szamla {
 
     public boolean isStorno() {
         return stEredeti != null && !stEredeti.isEmpty();
+    }
+
+    public boolean isModified() {
+        return modEredeti != null && !modEredeti.isEmpty();
     }
 
     public boolean isDeviza() {
