@@ -18,7 +18,7 @@ public class DaoFactory {
             szamlaDaoMap.put(Szamla.SzamlaType.P, DaoFactory.pSzamlaDao());
             szamlaDaoMap.put(Szamla.SzamlaType.V, DaoFactory.vSzamlaDao());
             szamlaDaoMap.put(Szamla.SzamlaType.Z, DaoFactory.zSzamlaDao());
-            szamlaDaoMap.put(Szamla.SzamlaType.O, DaoFactory.oSzamlaDao());
+//            szamlaDaoMap.put(Szamla.SzamlaType.O, DaoFactory.oSzamlaDao());
             szamlaDaoMap.put(Szamla.SzamlaType.DV, DaoFactory.dvSzamlaDao());
         }
         return szamlaDaoMap;
@@ -72,13 +72,13 @@ public class DaoFactory {
         return zSzamlaDao;
     }
 
-    private static OSzamlaDao oSzamlaDao;
-    public static OSzamlaDao oSzamlaDao() {
-        if (oSzamlaDao == null) {
-            oSzamlaDao = new OSzamlaDao();
-        }
-        return oSzamlaDao;
-    }
+//    private static OSzamlaDao oSzamlaDao;
+//    public static OSzamlaDao oSzamlaDao() {
+//        if (oSzamlaDao == null) {
+//            oSzamlaDao = new OSzamlaDao();
+//        }
+//        return oSzamlaDao;
+//    }
 
     private static DVSzamlaDao dvSzamlaDao;
     public static DVSzamlaDao dvSzamlaDao() {

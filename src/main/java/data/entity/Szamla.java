@@ -10,7 +10,7 @@ import java.util.Map;
 public class Szamla {
 
     public enum SzamlaType {
-        B, V, K, G, P, Z, O, DV
+        B, V, K, G, P, Z, DV
     }
 
     public enum States {
