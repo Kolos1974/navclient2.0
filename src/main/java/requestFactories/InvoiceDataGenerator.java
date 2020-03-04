@@ -210,7 +210,8 @@ public class InvoiceDataGenerator {
         //ST_EREDETI VAGY MOD_EREDETI SZEREPEL
         if (szamla.isStorno() || szamla.isModified()) {
             InvoiceReferenceType invoiceReferenceType = new InvoiceReferenceType();
-            invoiceReferenceType.setOriginalInvoiceNumber(szamla.getStEredeti());
+            if (szamla.isStorno()) invoiceReferenceType.setOriginalInvoiceNumber(szamla.getStEredeti());
+            else invoiceReferenceType.setOriginalInvoiceNumber(szamla.getModEredeti());
             invoiceReferenceType.setModifyWithoutMaster(false);
             invoiceReferenceType.setModificationIndex(1);
             invoiceType.setInvoiceReference(invoiceReferenceType);
