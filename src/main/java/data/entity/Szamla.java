@@ -25,6 +25,7 @@ public class Szamla {
     private String iktSzam;
     private String stEredeti;
     private String modEredeti;
+    private int eredetiTetelCount;
     private String szekod;
     //NOTE: most konstans
     private String category = "NORMAL";
@@ -87,6 +88,14 @@ public class Szamla {
 
     public void setModEredeti(String modEredeti) {
         this.modEredeti = modEredeti;
+    }
+
+    public int getEredetiTetelCount() {
+        return eredetiTetelCount;
+    }
+
+    public void setEredetiTetelCount(int eredetiTetelCount) {
+        this.eredetiTetelCount = eredetiTetelCount;
     }
 
     public Timestamp getBekdat() {

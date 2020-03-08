@@ -46,13 +46,27 @@ public abstract class SzamlaDao extends BaseDao {
                             "SELECT * FROM " + getTetelTableName()
                                     + " INNER JOIN Cikkek ON Cikkek.Cikkszam = " + getTetelTableName() + ".Cikkszam"
                                     + " WHERE IKTSZAM = ? ORDER BY TETELSORSZ");
-                    if (szamla.getType() == Szamla.SzamlaType.V)
+                    if (szamla.getType() == Szamla.SzamlaType.V || szamla.getType() == Szamla.SzamlaType.DV)
                         preparedStatementTetel.setInt(1, Integer.parseInt(szamla.getIktSzam()));
                     else preparedStatementTetel.setString(1, szamla.getIktSzam());
                     ResultSet tetelResultSet = preparedStatementTetel.executeQuery();
                     while (tetelResultSet.next()) {
                         szamla.addTetel(getSzamlaTetelFromResultSet(tetelResultSet));
                     }
+
+                    if (szamla.isModified()) {
+                        String modE = szamla.getModEredeti();
+                        PreparedStatement eredetiCountPst = conn.prepareStatement("SELECT COUNT(*) as count " +
+                                        "FROM " + getTetelTableName() + " t " +
+                                "INNER JOIN " + getTableName() + " sz ON t.IKTSZAM = sz.IKTSZAM " +
+                                "WHERE sz.IKTSZAM < '" + szamla.getIktSzam() + "' AND " +
+                                "( sz.IKTSZAM = '" + modE + "'" +
+                                " OR sz.Mod_Eredeti = '" + modE + "'" +
+                                " OR sz.St_Eredeti = '" + modE + "')");
+                        ResultSet countResultSet = eredetiCountPst.executeQuery();
+                        if (countResultSet.next()) szamla.setEredetiTetelCount(countResultSet.getInt("count"));
+                    }
+
                     szamla.calculateSummeries();
                     szamlak.add(szamla);
                 }

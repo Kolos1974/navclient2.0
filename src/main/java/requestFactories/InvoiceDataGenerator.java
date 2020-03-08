@@ -146,8 +146,12 @@ public class InvoiceDataGenerator {
             line.setLineAmountsNormal(lineAmountsNormal);
             if (szamla.isStorno() || szamla.isModified()) {
                 LineModificationReferenceType lineModificationReferenceType = new LineModificationReferenceType();
-                int numberOfTetels = szamla.getTetels().size();
-                lineModificationReferenceType.setLineNumberReference(BigInteger.valueOf(tetel.getTetelsorsz() + numberOfTetels));
+                if (szamla.isStorno()) {
+                    int numberOfTetels = szamla.getTetels().size();
+                    lineModificationReferenceType.setLineNumberReference(BigInteger.valueOf(tetel.getTetelsorsz() + numberOfTetels));
+                } else {
+                    lineModificationReferenceType.setLineNumberReference(BigInteger.valueOf(tetel.getTetelsorsz() + szamla.getEredetiTetelCount()));
+                }
                 lineModificationReferenceType.setLineOperation(LineOperationType.CREATE);
                 line.setLineModificationReference(lineModificationReferenceType);
             }
