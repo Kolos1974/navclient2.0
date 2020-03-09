@@ -47,15 +47,11 @@ public class Szamla {
     private String szamlaSzam;
 
     //SUMMARY
-    private Map<BigDecimal, VatSummary> vatSummeries;
+    private Map<String, VatSummary> vatSummeries;
     private OverallSummary overallSummary;
 
-    public Map<BigDecimal, VatSummary> getVatSummeries() {
+    public Map<String, VatSummary> getVatSummeries() {
         return vatSummeries;
-    }
-
-    public void setVatSummeries(Map<BigDecimal, VatSummary> vatSummeries) {
-        this.vatSummeries = vatSummeries;
     }
 
     public Timestamp getSzidoszTol() {
@@ -223,9 +219,10 @@ public class Szamla {
         overallSummary = new OverallSummary();
         for (SzamlaTetel tetel : tetels) {
             //VatSummary
-            VatSummary vatSummary = vatSummeries.get(tetel.getAfaSzazalek());
+            String afaKulcs = tetel.getAfaKulcs();
+            VatSummary vatSummary = vatSummeries.get(afaKulcs);
             if (vatSummary == null) {
-                vatSummary = new VatSummary(tetel.getAfaSzazalek());
+                vatSummary = new VatSummary(afaKulcs);
             }
             BigDecimal afaalap = tetel.getAfaalap();
             BigDecimal afaertek = tetel.getAfaertek();
@@ -241,7 +238,7 @@ public class Szamla {
                 vatSummary.addToDevizaAfaErtek(devizaAfaertek);
                 vatSummary.addToDevizaBrutto(devizaBrutto);
             }
-            vatSummeries.putIfAbsent(tetel.getAfaSzazalek(), vatSummary);
+            vatSummeries.putIfAbsent(afaKulcs, vatSummary);
 
             //Overall
             overallSummary.addToAfaAlap(afaalap.setScale(0, BigDecimal.ROUND_HALF_UP));

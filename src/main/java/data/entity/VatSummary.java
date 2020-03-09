@@ -1,6 +1,7 @@
 package data.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class VatSummary {
 
@@ -14,14 +15,20 @@ public class VatSummary {
     private BigDecimal devizaAfaertekSum;
     private BigDecimal devizaBruttoSum;
 
-    public VatSummary(BigDecimal afaSzazalek) {
-        this.afaSzazalek = afaSzazalek;
+    public VatSummary(String afakulcs) {
+        this.afaSzazalek = BigDecimal.valueOf(this.getAfaSzazalakFromKulcs(afakulcs));
         this.afaalapSum = BigDecimal.ZERO;
         this.afaertekSum = BigDecimal.ZERO;
         this.bruttoSum = BigDecimal.ZERO;
         this.devizaAfaalapSum = BigDecimal.ZERO;
         this.devizaAfaertekSum = BigDecimal.ZERO;
         this.devizaBruttoSum = BigDecimal.ZERO;
+    }
+
+    private double getAfaSzazalakFromKulcs(String afaKulcs) {
+        List<String> sameVatPercentages = List.of("5", "18", "27");
+        if (sameVatPercentages.contains(afaKulcs)) return Double.parseDouble(afaKulcs);
+        return 0;
     }
 
     public BigDecimal getAfaSzazalek() {

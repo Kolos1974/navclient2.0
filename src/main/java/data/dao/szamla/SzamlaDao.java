@@ -152,6 +152,7 @@ public abstract class SzamlaDao extends BaseDao {
         tetel.setBrutto(rs.getBigDecimal("BRUTTO"));
         tetel.setIktSzam(rs.getString("IKTSZAM"));
         tetel.setKozvSzolg(rs.getString("KOZVSZOLG"));
+        tetel.setAfaKulcs(rs.getString("AFAKULCS"));
         try {
             tetel.setDevizaAfaalap(rs.getBigDecimal("DevizaAFAALAP"));
             tetel.setDevizaAfaertek(rs.getBigDecimal("DevizaAfaErtek"));

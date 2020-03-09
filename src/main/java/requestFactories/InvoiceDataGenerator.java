@@ -102,8 +102,6 @@ public class InvoiceDataGenerator {
         invoiceHead.setInvoiceDetail(invoiceDetail);
         //</invoiceHead>
 
-        BigDecimal bigDecimal100 = new BigDecimal(100);
-
         //<invoiceLines>
         LinesType lines = new LinesType();
         List<SzamlaTetel> tetels = szamla.getTetels();
@@ -132,8 +130,7 @@ public class InvoiceDataGenerator {
             lineNetAmountData.setLineNetAmount(isSzamlaDV ? tetel.getDevizaAfaalap() : tetel.getAfaalap());
             lineNetAmountData.setLineNetAmountHUF(tetel.getAfaalap());
             lineAmountsNormal.setLineNetAmountData(lineNetAmountData);
-            VatRateType vatRate = new VatRateType();
-            vatRate.setVatPercentage(tetel.getAfaSzazalek().divide(bigDecimal100).stripTrailingZeros());
+            VatRateType vatRate = constructVatRate(tetel.getAfaKulcs(), tetel.getAfaSzazalek());
             lineAmountsNormal.setLineVatRate(vatRate);
             LineVatDataType lineVatData = new LineVatDataType();
             lineVatData.setLineVatAmount(isSzamlaDV ? tetel.getDevizaAfaertek() : tetel.getAfaertek());
@@ -160,14 +157,14 @@ public class InvoiceDataGenerator {
         //</invoiceLines>
 
         //<invoiceSummary>
-        Map<BigDecimal, VatSummary> vatSummeries = szamla.getVatSummeries();
+        Map<String, VatSummary> vatSummeries = szamla.getVatSummeries();
         SummaryType invoiceSummary = new SummaryType();
         SummaryNormalType summaryNormal = new SummaryNormalType();
-        for (Map.Entry<BigDecimal, VatSummary> vatSummaryEntry : vatSummeries.entrySet()) {
+        for (Map.Entry<String, VatSummary> vatSummaryEntry : vatSummeries.entrySet()) {
             VatSummary value = vatSummaryEntry.getValue();
+            String afaKulcs = vatSummaryEntry.getKey();
             SummaryByVatRateType summaryByVatRate = new SummaryByVatRateType();
-            VatRateType vatRateSum = new VatRateType();
-            vatRateSum.setVatPercentage(value.getAfaSzazalek().divide(bigDecimal100).stripTrailingZeros());
+            VatRateType vatRateSum = constructVatRate(afaKulcs, value.getAfaSzazalek());
             summaryByVatRate.setVatRate(vatRateSum);
             VatRateNetDataType vatRateNetData = new VatRateNetDataType();
             vatRateNetData.setVatRateNetAmount(isSzamlaDV ? value.getDevizaAfaalapSum() : value.getAfaalapSum());
@@ -223,6 +220,23 @@ public class InvoiceDataGenerator {
         invoice.setInvoiceNumber(szamla.getIktSzam());
         invoice.setInvoiceMain(invoiceMain);
         return invoice;
+    }
+
+    private VatRateType constructVatRate(String afaKulcs, BigDecimal afaSzazalek) {
+        BigDecimal bigDecimal100 = new BigDecimal(100);
+        VatRateType vatRate = new VatRateType();
+        if (afaKulcs.equals("5") || afaKulcs.equals("18") || afaKulcs.equals("27")) {
+            vatRate.setVatPercentage(afaSzazalek.divide(bigDecimal100).stripTrailingZeros());
+        } else if (afaKulcs.equals("55")) {
+            vatRate.setVatOutOfScope(true);
+        } else if (afaKulcs.equals("66")) {
+            vatRate.setVatExemption("AAM");
+        } else if (afaKulcs.equals("77")) {
+            vatRate.setVatExemption("TAM");
+        } else if (afaKulcs.equals("88")) {
+            vatRate.setVatDomesticReverseCharge(true);
+        }
+        return vatRate;
     }
 
 
