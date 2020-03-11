@@ -1,6 +1,7 @@
 package data.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VatSummary {
@@ -26,7 +27,10 @@ public class VatSummary {
     }
 
     private double getAfaSzazalakFromKulcs(String afaKulcs) {
-        List<String> sameVatPercentages = List.of("5", "18", "27");
+        List<String> sameVatPercentages = new ArrayList<>();
+        sameVatPercentages.add("5");
+        sameVatPercentages.add("18");
+        sameVatPercentages.add("27");
         if (sameVatPercentages.contains(afaKulcs)) return Double.parseDouble(afaKulcs);
         return 0;
     }
